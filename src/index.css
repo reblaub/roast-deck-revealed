@@ -67,3 +67,17 @@
     @apply bg-gradient-to-r from-roast-purple via-roast-blue to-roast-orange bg-clip-text text-transparent;
   }
 }
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+  animation-delay: calc(var(--delay, 0) * 1s);
+}

@@ -3,10 +3,11 @@ import React from 'react';
 import Logo from '@/components/Logo';
 import FileUploader from '@/components/FileUploader';
 import SignupForm from '@/components/SignupForm';
+import TextBubble from '@/components/TextBubble';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="min-h-screen bg-black text-white flex flex-col overflow-hidden relative">
       <div className="w-full max-w-7xl mx-auto px-6 py-8">
         {/* Hero Section */}
         <div className="flex flex-col items-center justify-center min-h-[80vh] py-16 gap-10">
@@ -21,7 +22,7 @@ const Index = () => {
               Let us roast your pitch deck
             </h1>
             <p className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto">
-              Hear the hard truth now before it's too late
+              Hear the hard truth before it's too late
             </p>
           </div>
           
@@ -37,7 +38,7 @@ const Index = () => {
         <div className="py-16 flex flex-col items-center">
           <div className="text-center mb-8 max-w-3xl">
             <h2 className="text-2xl md:text-3xl font-semibold mb-3">
-              If you'd like constructive feedback from top angel investors and VCs sign up here
+              Sign up for personalized feedback from top angel investors and VCs
             </h2>
             <p className="text-white/70">
               Get detailed insights from experienced investors who've seen thousands of pitch decks
@@ -58,6 +59,14 @@ const Index = () => {
           <p>© {new Date().getFullYear()} Roast. All rights reserved.</p>
         </div>
       </footer>
+      
+      {/* Text Bubbles */}
+      <TextBubble message="I fell asleep at slide 2" position="left" className="top-[15%]" />
+      <TextBubble message="After 6 slides I still don't know what the product is" position="right" className="top-[25%]" />
+      <TextBubble message="This hurts my eyes" position="left" className="top-[40%]" />
+      <TextBubble message="What's the story here?" position="right" className="top-[55%]" />
+      <TextBubble message="Less is more" position="left" className="top-[70%]" />
+      <TextBubble message="If the slide message isn't in the title, not gonna read it" position="right" className="top-[85%]" />
       
       {/* Gradient Orbs (Background Effects) */}
       <div className="fixed top-20 left-20 w-96 h-96 rounded-full bg-roast-purple/10 blur-3xl opacity-20 animate-pulse-slow" />
