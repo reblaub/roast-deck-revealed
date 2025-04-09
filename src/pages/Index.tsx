@@ -67,6 +67,7 @@ const Index = () => {
       <TextBubble message="What's your TAM?" position="right" className="top-[38%] right-[15%]" />
       <TextBubble message="I don't see any GtM slides, why?" position="left" className="top-[52%] left-[12%]" />
       <TextBubble message="If the slide message isn't in the title, not gonna read it" position="right" className="top-[48%] right-[12%]" />
+      <TextBubble message="Slide 8, my grandma could make a better design" position="left" className="top-[60%] left-[14%]" />
       
       {/* Gradient Orbs (Background Effects) */}
       <div className="fixed top-20 left-20 w-96 h-96 rounded-full bg-roast-purple/10 blur-3xl opacity-20 animate-pulse-slow" />
@@ -76,3 +77,4 @@ const Index = () => {
 };
 
 export default Index;
+
