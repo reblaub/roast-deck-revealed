@@ -60,13 +60,13 @@ const Index = () => {
         </div>
       </footer>
       
-      {/* Text Bubbles */}
-      <TextBubble message="I fell asleep at slide 2" position="left" className="top-[15%]" />
-      <TextBubble message="After 6 slides I still don't know what the product is" position="right" className="top-[25%]" />
-      <TextBubble message="This hurts my eyes" position="left" className="top-[40%]" />
-      <TextBubble message="What's the story here?" position="right" className="top-[55%]" />
-      <TextBubble message="Less is more" position="left" className="top-[70%]" />
-      <TextBubble message="If the slide message isn't in the title, not gonna read it" position="right" className="top-[85%]" />
+      {/* Text Bubbles - Repositioned around the drag and drop area */}
+      <TextBubble message="I fell asleep at slide 2" position="left" className="top-[28%] left-[10%]" />
+      <TextBubble message="After 6 slides I still don't know what the product is" position="right" className="top-[22%] right-[10%]" />
+      <TextBubble message="This hurts my eyes" position="left" className="top-[40%] left-[15%]" />
+      <TextBubble message="What's your TAM?" position="right" className="top-[38%] right-[15%]" />
+      <TextBubble message="I don't see any GtM slides, why?" position="left" className="top-[52%] left-[12%]" />
+      <TextBubble message="If the slide message isn't in the title, not gonna read it" position="right" className="top-[48%] right-[12%]" />
       
       {/* Gradient Orbs (Background Effects) */}
       <div className="fixed top-20 left-20 w-96 h-96 rounded-full bg-roast-purple/10 blur-3xl opacity-20 animate-pulse-slow" />
