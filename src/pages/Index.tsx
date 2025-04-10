@@ -4,6 +4,7 @@ import Logo from '@/components/Logo';
 import FileUploader from '@/components/FileUploader';
 import SignupForm from '@/components/SignupForm';
 import TextBubble from '@/components/TextBubble';
+import InvestorProfiles from '@/components/InvestorProfiles';
 
 const Index = () => {
   return (
@@ -51,6 +52,9 @@ const Index = () => {
             <p>Your deck will remain confidential and only shared with our investor panel</p>
           </div>
         </div>
+        
+        {/* Investor Profiles Section */}
+        <InvestorProfiles />
       </div>
       
       {/* Footer */}
@@ -77,4 +81,3 @@ const Index = () => {
 };
 
 export default Index;
-
