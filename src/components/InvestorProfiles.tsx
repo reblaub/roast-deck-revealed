@@ -2,6 +2,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Investor {
   name: string;
@@ -32,15 +33,17 @@ const investors: Investor[] = [
 ];
 
 const InvestorProfiles = () => {
+  const isMobile = useIsMobile();
+  
   return (
-    <div className="py-16 flex flex-col items-center">
-      <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-gradient">
-        Be prepared to be roasted by the ones who know best, <br />
+    <div className="py-8 md:py-16 flex flex-col items-center px-4">
+      <h2 className="text-xl md:text-3xl font-semibold mb-6 md:mb-8 text-gradient text-center">
+        Be prepared to be roasted by the ones who know best, {!isMobile && <br />}
         <span className="italic">la crème de la crème</span>
       </h2>
       
-      <div className="flex justify-center items-center flex-wrap gap-6 md:gap-10 mb-8">
-        {investors.map((investor, index) => (
+      <div className="flex justify-center items-center flex-wrap gap-4 md:gap-10 mb-6 md:mb-8">
+        {investors.map((investor) => (
           <div 
             key={investor.name} 
             className="flex flex-col items-center"
@@ -49,15 +52,15 @@ const InvestorProfiles = () => {
               className="relative" 
               style={{ animationDelay: `${investor.delay * 0.5}s` }}
             >
-              <Avatar className="w-20 h-20 md:w-24 md:h-24 animate-float border-2 border-white/20">
+              <Avatar className="w-16 h-16 md:w-24 md:h-24 animate-float border-2 border-white/20">
                 <AvatarImage src={investor.image} alt={investor.name} />
-                <AvatarFallback className="bg-gradient-to-r from-roast-purple via-roast-blue to-roast-orange text-white">
+                <AvatarFallback className="bg-gradient-to-r from-roast-purple via-roast-blue to-roast-orange text-white text-sm md:text-base">
                   {investor.initials}
                 </AvatarFallback>
               </Avatar>
               <div className="absolute inset-0 blur-lg opacity-40 bg-gradient-to-r from-roast-purple via-roast-blue to-roast-orange rounded-full animate-pulse-slow" />
             </div>
-            <p className="mt-3 text-sm font-medium text-white/70">{investor.name}</p>
+            <p className="mt-2 md:mt-3 text-xs md:text-sm font-medium text-white/70">{investor.name}</p>
           </div>
         ))}
       </div>
