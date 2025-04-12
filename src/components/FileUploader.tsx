@@ -16,17 +16,24 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
   const [loadingMessage, setLoadingMessage] = useState('');
   const { toast } = useToast();
 
-  const allLoadingMessages = [
+  // These are the specific messages requested by the user
+  const requestedMessages = [
     "Improving your pitch to get you ghosted faster...",
     "Compressing your ego... please wait",
     "Unicorn detected... just kidding.",
-    "Asking Sequoia if they've heard of you, please wait.",
+    "Asking Sequoia if they've heard of you, please wait."
+  ];
+  
+  // Additional messages to increase variety
+  const additionalMessages = [
     "Calculating your burn rate... ouch.",
     "Measuring founder-market fit... not looking good.",
     "Comparing you to ChatGPT's growth... yikes.",
     "Counting buzzwords in your deck... too many.",
     "Scanning for actual revenue... still searching."
   ];
+  
+  const allLoadingMessages = [...requestedMessages, ...additionalMessages];
   
   // Selected messages for current upload
   const [selectedMessages, setSelectedMessages] = useState<string[]>([]);
@@ -43,9 +50,23 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
 
   useEffect(() => {
     if (isLoading) {
-      // Select 3 random messages for this upload
-      const shuffled = shuffleArray(allLoadingMessages);
-      const selected = shuffled.slice(0, 3);
+      // Ensure at least 3 of the requested messages are included
+      let selected: string[] = [];
+      
+      // Ensure we have the user's requested messages (shuffle them to randomize order)
+      const shuffledRequested = shuffleArray(requestedMessages);
+      
+      // Take 3 messages from the requested ones (or all if less than 3)
+      const requestedToUse = shuffledRequested.slice(0, 3);
+      selected = [...requestedToUse];
+      
+      // If we need more messages to reach 3 total, add from additional messages
+      if (selected.length < 3) {
+        const shuffledAdditional = shuffleArray(additionalMessages);
+        selected = [...selected, ...shuffledAdditional.slice(0, 3 - selected.length)];
+      }
+      
+      // Set the selected messages for this upload
       setSelectedMessages(selected);
       setLoadingMessage(selected[0]);
 
@@ -71,8 +92,8 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
       let messageIndex = 0;
       
       const messageInterval = setInterval(() => {
-        messageIndex = (messageIndex + 1) % selectedMessages.length;
-        setLoadingMessage(selectedMessages[messageIndex]);
+        messageIndex = (messageIndex + 1) % selected.length;
+        setLoadingMessage(selected[messageIndex]);
         
         if (currentProgress >= 100) {
           clearInterval(messageInterval);
