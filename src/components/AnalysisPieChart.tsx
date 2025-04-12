@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { Share2, Download, ChartPie } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -10,13 +11,40 @@ interface PieChartData {
   name: string;
   value: number;
   color: string;
+  description: string;
 }
 
 const defaultData: PieChartData[] = [
-  { name: 'Unicorn Potential', value: 40, color: '#FF6B6B' },
-  { name: 'LinkedIn Fame vs Reality Gap', value: 20, color: '#4ECDC4' },
-  { name: 'Work-Life Balance Survival', value: 15, color: '#FFD166' },
-  { name: 'Buzzword Density', value: 25, color: '#6A0572' },
+  { 
+    name: 'Unicorn Potential', 
+    value: 35, 
+    color: '#FF6B6B',
+    description: 'Probability of becoming the next unicorn (or at least that's what your mom thinks).'
+  },
+  { 
+    name: 'LinkedIn Fame vs Reality Gap', 
+    value: 20, 
+    color: '#4ECDC4',
+    description: 'The difference between your LinkedIn presence and actual business results.'
+  },
+  { 
+    name: 'Work-Life Balance Survival', 
+    value: 15, 
+    color: '#FFD166',
+    description: 'Chance of maintaining any semblance of a personal life while chasing your startup dreams.'
+  },
+  { 
+    name: 'Corporate Return Risk', 
+    value: 20, 
+    color: '#6A0572',
+    description: 'Probability of ending up back in corporate life within 24 months.'
+  },
+  { 
+    name: 'Investor FOMO Factor', 
+    value: 10, 
+    color: '#118AB2',
+    description: 'How likely investors are to fund you based purely on fear of missing out.'
+  }
 ];
 
 const generateRandomData = (fileName: string): PieChartData[] => {
@@ -28,24 +56,34 @@ const generateRandomData = (fileName: string): PieChartData[] => {
   return [
     { 
       name: 'Unicorn Potential', 
-      value: Math.max(15, Math.min(60, 30 + (seed % 30))), 
-      color: '#FF6B6B' 
+      value: Math.max(15, Math.min(55, 30 + (seed % 30))), 
+      color: '#FF6B6B',
+      description: 'Probability of becoming the next unicorn (or at least that's what your mom thinks).'
     },
     { 
       name: 'LinkedIn Fame vs Reality Gap', 
-      value: Math.max(10, Math.min(40, 20 + (seed % 20))), 
-      color: '#4ECDC4' 
+      value: Math.max(10, Math.min(35, 20 + (seed % 20))), 
+      color: '#4ECDC4',
+      description: 'The difference between your LinkedIn presence and actual business results.'
     },
     { 
       name: 'Work-Life Balance Survival', 
-      value: Math.max(5, Math.min(30, 15 + (seed % 15))), 
-      color: '#FFD166' 
+      value: Math.max(5, Math.min(25, 15 + (seed % 15))), 
+      color: '#FFD166',
+      description: 'Chance of maintaining any semblance of a personal life while chasing your startup dreams.'
     },
     { 
-      name: 'Buzzword Density', 
-      value: Math.max(15, Math.min(45, 25 + (seed % 20))), 
-      color: '#6A0572' 
+      name: 'Corporate Return Risk', 
+      value: Math.max(10, Math.min(30, 20 + (seed % 20))), 
+      color: '#6A0572',
+      description: 'Probability of ending up back in corporate life within 24 months.'
     },
+    { 
+      name: 'Investor FOMO Factor', 
+      value: Math.max(5, Math.min(25, 15 + (seed % 15))), 
+      color: '#118AB2',
+      description: 'How likely investors are to fund you based purely on fear of missing out.'
+    }
   ];
 };
 
@@ -63,11 +101,33 @@ const CustomTooltip = ({ active, payload }: any) => {
     return (
       <div className="bg-background border border-border p-2 rounded-md shadow-lg">
         <p className="font-medium">{`${payload[0].name}: ${payload[0].value}%`}</p>
+        <p className="text-xs text-muted-foreground">{payload[0].payload.description}</p>
       </div>
     );
   }
 
   return null;
+};
+
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, name }: any) => {
+  const RADIAN = Math.PI / 180;
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text 
+      x={x} 
+      y={y} 
+      fill="white" 
+      textAnchor={x > cx ? 'start' : 'end'} 
+      dominantBaseline="central"
+      fontSize="12"
+      fontWeight="bold"
+    >
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
 };
 
 interface AnalysisPieChartProps {
@@ -77,6 +137,7 @@ interface AnalysisPieChartProps {
 
 const AnalysisPieChart: React.FC<AnalysisPieChartProps> = ({ fileName, className }) => {
   const chartRef = React.useRef<HTMLDivElement>(null);
+  const downloadChartRef = React.useRef<HTMLDivElement>(null);
   const data = React.useMemo(() => {
     const rawData = fileName ? generateRandomData(fileName) : defaultData;
     return normalizeData(rawData);
@@ -86,8 +147,8 @@ const AnalysisPieChart: React.FC<AnalysisPieChartProps> = ({ fileName, className
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'My Pitch Deck Analysis',
-          text: `Check out my startup's analysis:\n${data.map(item => `${item.name}: ${item.value}%`).join('\n')}`,
+          title: 'My Startup Reality Check',
+          text: `Check out my startup's reality check:\n${data.map(item => `${item.name}: ${item.value}%`).join('\n')}`,
         });
       } catch (error) {
         console.error('Error sharing:', error);
@@ -99,7 +160,7 @@ const AnalysisPieChart: React.FC<AnalysisPieChartProps> = ({ fileName, className
   };
 
   const copyToClipboard = () => {
-    const text = `Check out my startup's analysis:\n${data.map(item => `${item.name}: ${item.value}%`).join('\n')}`;
+    const text = `Check out my startup's reality check:\n${data.map(item => `${item.name}: ${item.value}%`).join('\n')}`;
     navigator.clipboard.writeText(text).then(() => {
       toast({
         title: "Copied to clipboard!",
@@ -109,23 +170,147 @@ const AnalysisPieChart: React.FC<AnalysisPieChartProps> = ({ fileName, className
   };
 
   const downloadChart = () => {
-    if (chartRef.current) {
-      toPng(chartRef.current)
-        .then((dataUrl) => {
-          const link = document.createElement('a');
-          link.download = 'startup-analysis.png';
-          link.href = dataUrl;
-          link.click();
-        })
-        .catch((error) => {
-          console.error('Error downloading chart:', error);
-          toast({
-            title: "Download failed",
-            description: "Please try again later.",
-            variant: "destructive",
+    // Create a hidden version with the legend for download
+    const downloadDiv = document.createElement('div');
+    downloadDiv.style.width = '600px';
+    downloadDiv.style.height = '800px';
+    downloadDiv.style.padding = '20px';
+    downloadDiv.style.backgroundColor = '#1a1a1a';
+    downloadDiv.style.color = 'white';
+    downloadDiv.style.fontFamily = 'sans-serif';
+    
+    // Add title
+    const title = document.createElement('h2');
+    title.textContent = 'My Startup Reality Check';
+    title.style.textAlign = 'center';
+    title.style.margin = '10px 0 20px';
+    downloadDiv.appendChild(title);
+    
+    // Create a chart container
+    const chartContainer = document.createElement('div');
+    chartContainer.style.width = '100%';
+    chartContainer.style.height = '400px';
+    
+    // Append temporary div to the body to render it
+    document.body.appendChild(downloadDiv);
+    downloadDiv.appendChild(chartContainer);
+    
+    // Add legend
+    const legend = document.createElement('div');
+    legend.style.padding = '20px';
+    legend.style.marginTop = '20px';
+    legend.style.border = '1px solid rgba(255,255,255,0.1)';
+    legend.style.borderRadius = '8px';
+    
+    // Add legend title
+    const legendTitle = document.createElement('h3');
+    legendTitle.textContent = 'Legend';
+    legendTitle.style.marginBottom = '15px';
+    legend.appendChild(legendTitle);
+    
+    // Add each data point with description
+    data.forEach(item => {
+      const itemDiv = document.createElement('div');
+      itemDiv.style.marginBottom = '12px';
+      itemDiv.style.display = 'flex';
+      itemDiv.style.alignItems = 'flex-start';
+      
+      const colorBox = document.createElement('div');
+      colorBox.style.width = '15px';
+      colorBox.style.height = '15px';
+      colorBox.style.backgroundColor = item.color;
+      colorBox.style.marginRight = '10px';
+      colorBox.style.marginTop = '3px';
+      colorBox.style.flexShrink = '0';
+      
+      const textDiv = document.createElement('div');
+      
+      const itemTitle = document.createElement('div');
+      itemTitle.textContent = `${item.name}: ${item.value}%`;
+      itemTitle.style.fontWeight = 'bold';
+      itemTitle.style.marginBottom = '4px';
+      
+      const itemDesc = document.createElement('div');
+      itemDesc.textContent = item.description;
+      itemDesc.style.fontSize = '14px';
+      itemDesc.style.opacity = '0.8';
+      
+      textDiv.appendChild(itemTitle);
+      textDiv.appendChild(itemDesc);
+      
+      itemDiv.appendChild(colorBox);
+      itemDiv.appendChild(textDiv);
+      legend.appendChild(itemDiv);
+    });
+    
+    downloadDiv.appendChild(legend);
+    
+    // Add footer
+    const footer = document.createElement('div');
+    footer.style.marginTop = '20px';
+    footer.style.textAlign = 'center';
+    footer.style.fontSize = '14px';
+    footer.style.opacity = '0.7';
+    footer.textContent = 'Generated by Roast • Share your startup reality check!';
+    downloadDiv.appendChild(footer);
+    
+    // Render the chart in the container
+    const chart = document.createElement('div');
+    chart.style.width = '100%';
+    chart.style.height = '100%';
+    chartContainer.appendChild(chart);
+    
+    // Use React to render the chart
+    import('react-dom/client').then(({ createRoot }) => {
+      const root = createRoot(chart);
+      root.render(
+        <PieChart width={550} height={400}>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="50%"
+            labelLine={false}
+            outerRadius="80%"
+            innerRadius="40%"
+            dataKey="value"
+            label={renderCustomizedLabel}
+          >
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.color} />
+            ))}
+          </Pie>
+          <Legend 
+            layout="horizontal"
+            verticalAlign="bottom"
+            align="center"
+          />
+        </PieChart>
+      );
+      
+      // After rendering, convert to PNG
+      setTimeout(() => {
+        toPng(downloadDiv)
+          .then((dataUrl) => {
+            const link = document.createElement('a');
+            link.download = 'startup-reality-check.png';
+            link.href = dataUrl;
+            link.click();
+            
+            // Clean up
+            document.body.removeChild(downloadDiv);
+          })
+          .catch((error) => {
+            console.error('Error downloading chart:', error);
+            // Clean up
+            document.body.removeChild(downloadDiv);
+            toast({
+              title: "Download failed",
+              description: "Please try again later.",
+              variant: "destructive",
+            });
           });
-        });
-    }
+      }, 500);
+    });
   };
 
   return (
@@ -156,7 +341,7 @@ const AnalysisPieChart: React.FC<AnalysisPieChartProps> = ({ fileName, className
               data={data}
               cx="50%"
               cy="50%"
-              labelLine={false}
+              labelLine={true}
               outerRadius="80%"
               innerRadius="40%"
               dataKey="value"
@@ -167,8 +352,24 @@ const AnalysisPieChart: React.FC<AnalysisPieChartProps> = ({ fileName, className
               ))}
             </Pie>
             <Tooltip content={<CustomTooltip />} />
+            <Legend layout="vertical" verticalAlign="middle" align="right" />
           </PieChart>
         </ResponsiveContainer>
+      </div>
+
+      <div className="space-y-4 mb-6">
+        {data.map((item, index) => (
+          <div key={index} className="flex items-start gap-2">
+            <div 
+              className="w-3 h-3 rounded-sm flex-shrink-0 mt-1.5" 
+              style={{ backgroundColor: item.color }}
+            />
+            <div>
+              <p className="font-medium text-white">{item.name}: {item.value}%</p>
+              <p className="text-sm text-white/60">{item.description}</p>
+            </div>
+          </div>
+        ))}
       </div>
 
       <div className="flex justify-center gap-4">
