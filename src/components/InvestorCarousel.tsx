@@ -1,147 +1,69 @@
-
-import React, { useEffect, useRef } from 'react';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { 
-  Carousel, 
-  CarouselContent, 
-  CarouselItem
-} from '@/components/ui/carousel';
+import React from 'react';
+import { Users } from 'lucide-react';
 
 interface Investor {
   name: string;
-  image: string;
-  initials: string;
+  title: string;
+  company: string;
 }
 
-// Extended list of investors
-const investors: Investor[] = [
-  {
-    name: 'Roxane Varza',
-    image: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9',
-    initials: 'RV',
-  },
-  {
-    name: 'Jean de la Rochebrochard',
-    image: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625',
-    initials: 'JR',
-  },
-  {
-    name: 'Guillaume Moubeche',
-    image: 'https://images.unsplash.com/photo-1494891848038-7bd202a2afeb',
-    initials: 'GM',
-  },
-  {
-    name: 'Marc Andreessen',
-    image: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5',
-    initials: 'MA',
-  },
-  {
-    name: 'Sarah Tavel',
-    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956',
-    initials: 'ST',
-  },
-  {
-    name: 'Paul Graham',
-    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d',
-    initials: 'PG',
-  },
-  {
-    name: 'Jessica Livingston',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb',
-    initials: 'JL',
-  },
-  {
-    name: 'John Doerr',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d',
-    initials: 'JD',
-  },
-  {
-    name: 'Mary Meeker',
-    image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2',
-    initials: 'MM',
-  },
-  {
-    name: 'Chamath Palihapitiya',
-    image: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce',
-    initials: 'CP',
-  },
-];
-
 const InvestorCarousel: React.FC = () => {
-  const carouselRef = useRef<HTMLDivElement>(null);
-
-  // Auto-scroll the carousel
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (carouselRef.current) {
-        carouselRef.current.scrollLeft += 1;
-        
-        // Reset scroll position when reaching the end
-        const scrollWidth = carouselRef.current.scrollWidth;
-        const viewportWidth = carouselRef.current.clientWidth;
-        
-        if (carouselRef.current.scrollLeft >= scrollWidth - viewportWidth) {
-          carouselRef.current.scrollLeft = 0;
-        }
-      }
-    }, 20);
-
-    return () => clearInterval(interval);
-  }, []);
+  // Sample investor data
+  const investors: Investor[] = [
+    { name: "Marc Andreessen", title: "Co-founder", company: "Andreessen Horowitz" },
+    { name: "Paul Graham", title: "Co-founder", company: "Y Combinator" },
+    { name: "Alexis Ohanian", title: "Co-founder", company: "Reddit & Seven Seven Six" },
+    { name: "Garry Tan", title: "President & CEO", company: "Y Combinator" },
+    { name: "Sarah Tavel", title: "General Partner", company: "Benchmark" },
+    { name: "Fred Wilson", title: "Co-founder", company: "Union Square Ventures" },
+    { name: "Bill Gurley", title: "General Partner", company: "Benchmark" },
+    { name: "Mary Meeker", title: "Founder", company: "Bond Capital" },
+    { name: "Naval Ravikant", title: "Co-founder", company: "AngelList" },
+    { name: "Chamath Palihapitiya", title: "CEO", company: "Social Capital" },
+  ];
 
   return (
-    <div className="py-8 md:py-12 w-full overflow-hidden border-t border-white/10">
-      <div className="container px-4">
-        <h2 className="text-xl md:text-2xl font-semibold mb-6 text-gradient text-center">
-          Upcoming roasters
-        </h2>
-        <p className="text-center text-white/70 mb-8">
-          Be prepared to be roasted by the ones who know best
-        </p>
+    <div className="w-full py-10 bg-black border-t border-white/10">
+      <div className="container mx-auto text-center mb-6">
+        <h2 className="text-2xl font-bold text-gradient mb-1">Upcoming Roasters</h2>
+        <p className="text-white/60 text-sm">Be prepared to be roasted by...</p>
       </div>
-
-      <div className="relative w-full overflow-hidden">
-        <div 
-          ref={carouselRef}
-          className="flex gap-6 px-8 pb-4 overflow-x-auto scrollbar-none"
-          style={{ scrollBehavior: 'smooth' }}
-        >
+      
+      <div className="relative overflow-hidden">
+        <div className="flex animate-carousel gap-4 px-4">
+          {/* First set of investors */}
           {investors.map((investor, index) => (
             <div 
-              key={investor.name} 
-              className="flex flex-col items-center flex-none"
-              style={{ animationDelay: `${index * 0.2}s` }}
+              key={`investor-1-${index}`}
+              className="flex-shrink-0 w-64 p-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl"
             >
-              <div className="relative">
-                <Avatar className="w-16 h-16 md:w-20 md:h-20 animate-float border-2 border-white/20">
-                  <AvatarImage src={investor.image} alt={investor.name} />
-                  <AvatarFallback className="bg-gradient-to-r from-roast-purple via-roast-blue to-roast-orange text-white">
-                    {investor.initials}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="absolute inset-0 blur-lg opacity-40 bg-gradient-to-r from-roast-purple via-roast-blue to-roast-orange rounded-full animate-pulse-slow" />
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-full bg-roast-purple/20 flex items-center justify-center">
+                  <Users className="w-5 h-5 text-roast-purple" />
+                </div>
+                <div className="text-left">
+                  <h3 className="font-semibold text-white">{investor.name}</h3>
+                  <p className="text-xs text-white/60">{investor.title}, {investor.company}</p>
+                </div>
               </div>
-              <p className="mt-2 text-xs md:text-sm font-medium text-white/70">{investor.name}</p>
             </div>
           ))}
           
-          {/* Add duplicates for seamless looping */}
-          {investors.slice(0, 4).map((investor, index) => (
+          {/* Duplicate set for infinite scroll effect */}
+          {investors.map((investor, index) => (
             <div 
-              key={`${investor.name}-dup`} 
-              className="flex flex-col items-center flex-none"
-              style={{ animationDelay: `${(investors.length + index) * 0.2}s` }}
+              key={`investor-2-${index}`}
+              className="flex-shrink-0 w-64 p-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl"
             >
-              <div className="relative">
-                <Avatar className="w-16 h-16 md:w-20 md:h-20 animate-float border-2 border-white/20">
-                  <AvatarImage src={investor.image} alt={investor.name} />
-                  <AvatarFallback className="bg-gradient-to-r from-roast-purple via-roast-blue to-roast-orange text-white">
-                    {investor.initials}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="absolute inset-0 blur-lg opacity-40 bg-gradient-to-r from-roast-purple via-roast-blue to-roast-orange rounded-full animate-pulse-slow" />
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-full bg-roast-purple/20 flex items-center justify-center">
+                  <Users className="w-5 h-5 text-roast-purple" />
+                </div>
+                <div className="text-left">
+                  <h3 className="font-semibold text-white">{investor.name}</h3>
+                  <p className="text-xs text-white/60">{investor.title}, {investor.company}</p>
+                </div>
               </div>
-              <p className="mt-2 text-xs md:text-sm font-medium text-white/70">{investor.name}</p>
             </div>
           ))}
         </div>

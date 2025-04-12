@@ -2,12 +2,9 @@
 import React, { useState } from 'react';
 import Logo from '@/components/Logo';
 import FileUploader from '@/components/FileUploader';
-import EmailCapture from '@/components/EmailCapture';
-import InvestorCarousel from '@/components/InvestorCarousel';
 import TextBubble from '@/components/TextBubble';
 
 const Index = () => {
-  const [showRoastSection, setShowRoastSection] = useState(true);
   const [analysisComplete, setAnalysisComplete] = useState(false);
 
   const handleAnalysisComplete = () => {
@@ -41,9 +38,6 @@ const Index = () => {
               onAnalysisComplete={handleAnalysisComplete}
             />
           </div>
-          
-          {/* Email Capture - Only show after analysis is complete */}
-          {analysisComplete && <EmailCapture />}
         </div>
         
         {/* Only show text bubbles on initial state, not after analysis */}
@@ -59,9 +53,6 @@ const Index = () => {
           </>
         )}
       </div>
-      
-      {/* Investor Carousel - Always visible on all pages */}
-      <InvestorCarousel />
       
       {/* Footer */}
       <footer className="py-8 border-t border-white/10 mt-auto">

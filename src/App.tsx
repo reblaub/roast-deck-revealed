@@ -18,9 +18,14 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="min-h-screen flex flex-col">
       {children}
       
-      {/* Only show InvestorCarousel if we're not on the index page, 
-          since Index already includes it */}
-      {location.pathname !== "/" && <InvestorCarousel />}
+      {/* Custom wrapper for the InvestorCarousel with updated title */}
+      <div className="w-full py-10 bg-black border-t border-white/10">
+        <div className="container mx-auto text-center mb-6">
+          <h2 className="text-2xl font-bold text-gradient mb-1">Upcoming Roasters</h2>
+          <p className="text-white/60 text-sm">Be prepared to be roasted by...</p>
+        </div>
+        <InvestorCarousel />
+      </div>
     </div>
   );
 };
@@ -32,9 +37,17 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={
+            <AppLayout>
+              <Index />
+            </AppLayout>
+          } />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={
+            <AppLayout>
+              <NotFound />
+            </AppLayout>
+          } />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
