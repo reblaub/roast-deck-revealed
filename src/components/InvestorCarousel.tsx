@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Users } from 'lucide-react';
 
@@ -23,50 +24,43 @@ const InvestorCarousel: React.FC = () => {
   ];
 
   return (
-    <div className="w-full py-10 bg-black border-t border-white/10">
-      <div className="container mx-auto text-center mb-6">
-        <h2 className="text-2xl font-bold text-gradient mb-1">Upcoming Roasters</h2>
-        <p className="text-white/60 text-sm">Be prepared to be roasted by...</p>
-      </div>
-      
-      <div className="relative overflow-hidden">
-        <div className="flex animate-carousel gap-4 px-4">
-          {/* First set of investors */}
-          {investors.map((investor, index) => (
-            <div 
-              key={`investor-1-${index}`}
-              className="flex-shrink-0 w-64 p-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-roast-purple/20 flex items-center justify-center">
-                  <Users className="w-5 h-5 text-roast-purple" />
-                </div>
-                <div className="text-left">
-                  <h3 className="font-semibold text-white">{investor.name}</h3>
-                  <p className="text-xs text-white/60">{investor.title}, {investor.company}</p>
-                </div>
+    <div className="relative overflow-hidden">
+      <div className="flex animate-carousel gap-4 px-4">
+        {/* First set of investors */}
+        {investors.map((investor, index) => (
+          <div 
+            key={`investor-1-${index}`}
+            className="flex-shrink-0 w-64 p-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-full bg-roast-purple/20 flex items-center justify-center">
+                <Users className="w-5 h-5 text-roast-purple" />
+              </div>
+              <div className="text-left">
+                <h3 className="font-semibold text-white">{investor.name}</h3>
+                <p className="text-xs text-white/60">{investor.title}, {investor.company}</p>
               </div>
             </div>
-          ))}
-          
-          {/* Duplicate set for infinite scroll effect */}
-          {investors.map((investor, index) => (
-            <div 
-              key={`investor-2-${index}`}
-              className="flex-shrink-0 w-64 p-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-roast-purple/20 flex items-center justify-center">
-                  <Users className="w-5 h-5 text-roast-purple" />
-                </div>
-                <div className="text-left">
-                  <h3 className="font-semibold text-white">{investor.name}</h3>
-                  <p className="text-xs text-white/60">{investor.title}, {investor.company}</p>
-                </div>
+          </div>
+        ))}
+        
+        {/* Duplicate set for infinite scroll effect */}
+        {investors.map((investor, index) => (
+          <div 
+            key={`investor-2-${index}`}
+            className="flex-shrink-0 w-64 p-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-full bg-roast-purple/20 flex items-center justify-center">
+                <Users className="w-5 h-5 text-roast-purple" />
+              </div>
+              <div className="text-left">
+                <h3 className="font-semibold text-white">{investor.name}</h3>
+                <p className="text-xs text-white/60">{investor.title}, {investor.company}</p>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );

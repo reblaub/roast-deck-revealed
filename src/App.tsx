@@ -18,7 +18,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="min-h-screen flex flex-col">
       {children}
       
-      {/* Custom wrapper for the InvestorCarousel with updated title */}
+      {/* Investor Carousel */}
       <div className="w-full py-10 bg-black border-t border-white/10">
         <div className="container mx-auto text-center mb-6">
           <h2 className="text-2xl font-bold text-gradient mb-1">Upcoming Roasters</h2>
