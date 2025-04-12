@@ -3,6 +3,7 @@ import React from 'react';
 import { Flame, FileCheck, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import EmailCapture from './EmailCapture';
+import AnalysisPieChart from './AnalysisPieChart';
 
 interface RoastFeedbackProps {
   fileName?: string;
@@ -13,33 +14,33 @@ const RoastFeedback: React.FC<RoastFeedbackProps> = ({ fileName }) => {
   const roastFeedback = [
     {
       section: "Executive Summary",
-      feedback: "Your executive summary is like a first date that only talks about themselves. VCs need to know what's in it for them, not just how great you think you are.",
-      tip: "Focus on the problem, solution, and market opportunity within the first 30 seconds."
+      feedback: "Your executive summary shows promise but lacks the punch that makes investors sit up. It's like a movie trailer that forgot to show the explosions.",
+      tip: "Lead with your most compelling value proposition and include a clear, concise statement of the problem you're solving."
     },
     {
       section: "Market Size",
-      feedback: "Your TAM calculation is... ambitious. By 'ambitious' I mean 'completely detached from reality'.",
-      tip: "Break down your market size into TAM, SAM, and SOM with credible sources backing your numbers."
+      feedback: "Your market analysis is good, but your TAM calculation seems... optimistic. As in 'we'll capture 10% of China' optimistic.",
+      tip: "Break down your market size into TAM, SAM, and SOM with credible sources and a bottom-up calculation approach."
     },
     {
       section: "Competitive Analysis",
-      feedback: "Your competitive analysis conveniently omits every serious competitor in your space. VCs Google too, you know.",
-      tip: "Include a comprehensive competitor matrix and highlight your unique advantages."
+      feedback: "Your competitive landscape slide is missing a few giants that investors will immediately think of. This makes them question what else you might be missing.",
+      tip: "Create a comprehensive competitor matrix highlighting your unique advantages and be honest about where competitors are stronger."
     },
     {
       section: "Go-to-Market Strategy",
-      feedback: "Your go-to-market strategy seems to be 'if we build it, they will come'. Spoiler alert: they won't.",
-      tip: "Outline specific customer acquisition channels, costs, and timelines."
+      feedback: "Your GTM strategy needs more specifics. Currently it's like saying 'Step 1: Build product, Step 2: ???, Step 3: Profit!'",
+      tip: "Outline specific customer acquisition channels with costs, conversion metrics, and a timeline for scaling."
     },
     {
       section: "Financial Projections",
-      feedback: "Your hockey stick growth projections might impress the NHL, but VCs have seen this movie before.",
-      tip: "Include unit economics, cash burn rate, and realistic revenue forecasts with clear assumptions."
+      feedback: "Your financial projections show a beautiful hockey stick, but the assumptions behind them aren't clear. VCs have seen this movie before.",
+      tip: "Include unit economics and realistic revenue forecasts with transparent assumptions that tie directly to your GTM strategy."
     },
     {
       section: "Team",
-      feedback: "Your team slide suggests your 'blockchain expert' took a Udemy course last week. VCs fund teams more than ideas.",
-      tip: "Highlight relevant experience and why this specific team is uniquely positioned to win."
+      feedback: "Your team slide is solid, but doesn't fully explain why this specific team is uniquely positioned to win in this market.",
+      tip: "Highlight relevant domain expertise and past successes that demonstrate your unfair advantage in this specific market."
     }
   ];
 
@@ -60,7 +61,7 @@ const RoastFeedback: React.FC<RoastFeedbackProps> = ({ fileName }) => {
 
       <div className="mb-8 p-4 border border-white/10 rounded-lg bg-white/5 backdrop-blur-sm">
         <p className="text-white italic">
-          "This deck has potential, but like most early pitches, it needs refinement in key areas that investors scrutinize. Here's our quick analysis:"
+          "Your deck shows potential and you're on the right track! Here are some insights to help you refine your pitch and make investors excited about your vision:"
         </p>
       </div>
       
@@ -80,9 +81,15 @@ const RoastFeedback: React.FC<RoastFeedbackProps> = ({ fileName }) => {
         ))}
       </div>
 
+      {/* Add the pie chart */}
+      <AnalysisPieChart fileName={fileName} className="mb-8" />
+
       <div className="p-4 border border-roast-purple/20 rounded-lg bg-roast-purple/5 backdrop-blur-sm mb-8">
         <p className="text-white text-center">
-          Want a complete analysis with personalized feedback from top investors who've funded unicorns?
+          For personalized feedback from top investors who've funded unicorns, drop your email below.
+        </p>
+        <p className="text-white/60 text-sm text-center mt-1">
+          We'll contact you.
         </p>
       </div>
 
