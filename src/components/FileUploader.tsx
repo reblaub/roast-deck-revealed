@@ -54,7 +54,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
         if (currentProgress >= 100) {
           clearInterval(messageInterval);
         }
-      }, 2500); // Message changes every 2.5 seconds
+      }, 4000); // Message changes every 4 seconds instead of 2.5
 
       return () => {
         clearInterval(progressInterval);
