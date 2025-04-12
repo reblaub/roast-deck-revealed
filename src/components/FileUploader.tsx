@@ -16,15 +16,39 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
   const [loadingMessage, setLoadingMessage] = useState('');
   const { toast } = useToast();
 
-  const loadingMessages = [
+  const allLoadingMessages = [
     "Improving your pitch to get you ghosted faster...",
     "Compressing your ego... please wait",
     "Unicorn detected... just kidding.",
-    "Asking Sequoia if they've heard of you, please wait."
+    "Asking Sequoia if they've heard of you, please wait.",
+    "Calculating your burn rate... ouch.",
+    "Measuring founder-market fit... not looking good.",
+    "Comparing you to ChatGPT's growth... yikes.",
+    "Counting buzzwords in your deck... too many.",
+    "Scanning for actual revenue... still searching."
   ];
+  
+  // Selected messages for current upload
+  const [selectedMessages, setSelectedMessages] = useState<string[]>([]);
+
+  // Fisher-Yates shuffle algorithm
+  const shuffleArray = (array: string[]) => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  };
 
   useEffect(() => {
     if (isLoading) {
+      // Select 3 random messages for this upload
+      const shuffled = shuffleArray(allLoadingMessages);
+      const selected = shuffled.slice(0, 3);
+      setSelectedMessages(selected);
+      setLoadingMessage(selected[0]);
+
       // Start the progress animation
       let currentProgress = 0;
       const progressInterval = setInterval(() => {
@@ -45,16 +69,15 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
 
       // Display the sequential messages
       let messageIndex = 0;
-      setLoadingMessage(loadingMessages[messageIndex]);
       
       const messageInterval = setInterval(() => {
-        messageIndex = (messageIndex + 1) % loadingMessages.length;
-        setLoadingMessage(loadingMessages[messageIndex]);
+        messageIndex = (messageIndex + 1) % selectedMessages.length;
+        setLoadingMessage(selectedMessages[messageIndex]);
         
         if (currentProgress >= 100) {
           clearInterval(messageInterval);
         }
-      }, 4000); // Message changes every 4 seconds instead of 2.5
+      }, 4000); // Message changes every 4 seconds
 
       return () => {
         clearInterval(progressInterval);
