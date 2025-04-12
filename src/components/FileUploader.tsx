@@ -1,17 +1,19 @@
-
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { Upload, X, FileText } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import RoastFeedback from './RoastFeedback';
 
 interface FileUploaderProps {
   onFileUpload?: (file: File) => void;
+  onAnalysisComplete?: () => void;
 }
 
-const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
+const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload, onAnalysisComplete }) => {
   const [dragActive, setDragActive] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAnalysisComplete, setIsAnalysisComplete] = useState(false);
   const [progress, setProgress] = useState(0);
   const [loadingMessage, setLoadingMessage] = useState('');
   const { toast } = useToast();
@@ -80,6 +82,10 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
           clearInterval(progressInterval);
           setTimeout(() => {
             setIsLoading(false);
+            setIsAnalysisComplete(true);
+            if (onAnalysisComplete) {
+              onAnalysisComplete();
+            }
             toast({
               title: "Analysis complete",
               description: "Your pitch deck has been thoroughly roasted.",
@@ -105,7 +111,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
         clearInterval(messageInterval);
       };
     }
-  }, [isLoading, toast]);
+  }, [isLoading, toast, onAnalysisComplete]);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -169,9 +175,34 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
   const removeFile = () => {
     setFile(null);
     setIsLoading(false);
+    setIsAnalysisComplete(false);
     setProgress(0);
     setLoadingMessage('');
   };
+
+  const resetAnalysis = () => {
+    setFile(null);
+    setIsLoading(false);
+    setIsAnalysisComplete(false);
+    setProgress(0);
+    setLoadingMessage('');
+  };
+
+  if (isAnalysisComplete && file) {
+    return (
+      <div className="w-full max-w-xl mx-auto">
+        <RoastFeedback fileName={file.name} />
+        <div className="text-center mt-6">
+          <button
+            onClick={resetAnalysis}
+            className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
+          >
+            Upload Another Deck
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-xl mx-auto">
