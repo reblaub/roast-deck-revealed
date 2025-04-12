@@ -2,7 +2,6 @@
 import React from 'react';
 import Logo from '@/components/Logo';
 import FileUploader from '@/components/FileUploader';
-import SignupForm from '@/components/SignupForm';
 import TextBubble from '@/components/TextBubble';
 import InvestorProfiles from '@/components/InvestorProfiles';
 
@@ -32,24 +31,6 @@ const Index = () => {
             <FileUploader 
               onFileUpload={(file) => console.log("File uploaded:", file.name)} 
             />
-          </div>
-        </div>
-        
-        {/* Signup Section */}
-        <div className="py-16 flex flex-col items-center">
-          <div className="text-center mb-8 max-w-3xl">
-            <h2 className="text-2xl md:text-3xl font-semibold mb-3">
-              Sign up for personalized feedback from top angel investors and VCs
-            </h2>
-            <p className="text-white/70">
-              Get detailed insights from experienced investors who've seen thousands of pitch decks
-            </p>
-          </div>
-          
-          <SignupForm />
-          
-          <div className="mt-12 text-center text-sm text-white/40">
-            <p>Your deck will remain confidential and only shared with our investor panel</p>
           </div>
         </div>
         

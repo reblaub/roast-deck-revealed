@@ -1,7 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { Upload, X, FileText } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
 
 interface FileUploaderProps {
   onFileUpload?: (file: File) => void;
@@ -10,7 +11,57 @@ interface FileUploaderProps {
 const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
   const [dragActive, setDragActive] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [loadingMessage, setLoadingMessage] = useState('');
   const { toast } = useToast();
+
+  const loadingMessages = [
+    "Improving your pitch to get you ghosted faster...",
+    "Compressing your ego... please wait",
+    "Unicorn detected... just kidding.",
+    "Asking Sequoia if they've heard of you, please wait."
+  ];
+
+  useEffect(() => {
+    if (isLoading) {
+      // Start the progress animation
+      let currentProgress = 0;
+      const progressInterval = setInterval(() => {
+        currentProgress += 2;
+        setProgress(Math.min(currentProgress, 100));
+        
+        if (currentProgress >= 100) {
+          clearInterval(progressInterval);
+          setTimeout(() => {
+            setIsLoading(false);
+            toast({
+              title: "Analysis complete",
+              description: "Your pitch deck has been thoroughly roasted.",
+            });
+          }, 1000);
+        }
+      }, 200);
+
+      // Display the sequential messages
+      let messageIndex = 0;
+      setLoadingMessage(loadingMessages[messageIndex]);
+      
+      const messageInterval = setInterval(() => {
+        messageIndex = (messageIndex + 1) % loadingMessages.length;
+        setLoadingMessage(loadingMessages[messageIndex]);
+        
+        if (currentProgress >= 100) {
+          clearInterval(messageInterval);
+        }
+      }, 2500); // Message changes every 2.5 seconds
+
+      return () => {
+        clearInterval(progressInterval);
+        clearInterval(messageInterval);
+      };
+    }
+  }, [isLoading, toast]);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -63,18 +114,19 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
     }
     
     setFile(uploadedFile);
+    setIsLoading(true);
+    setProgress(0);
+    
     if (onFileUpload) {
       onFileUpload(uploadedFile);
     }
-    
-    toast({
-      title: "File uploaded successfully",
-      description: `${uploadedFile.name} is ready for roasting`,
-    });
   };
 
   const removeFile = () => {
     setFile(null);
+    setIsLoading(false);
+    setProgress(0);
+    setLoadingMessage('');
   };
 
   return (
@@ -113,23 +165,39 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
         </div>
       ) : (
         <div className="border-2 border-roast-purple/30 bg-roast-purple/5 rounded-xl p-6 text-white relative">
-          <button 
-            className="absolute top-3 right-3 p-1 bg-black/40 rounded-full hover:bg-black/60 transition-colors"
-            onClick={removeFile}
-          >
-            <X className="w-5 h-5" />
-          </button>
-          <div className="flex gap-4 items-center">
-            <div className="w-12 h-12 rounded-full bg-roast-purple/20 flex items-center justify-center flex-shrink-0">
-              <FileText className="w-6 h-6 text-roast-purple" />
+          {!isLoading ? (
+            <>
+              <button 
+                className="absolute top-3 right-3 p-1 bg-black/40 rounded-full hover:bg-black/60 transition-colors"
+                onClick={removeFile}
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <div className="flex gap-4 items-center">
+                <div className="w-12 h-12 rounded-full bg-roast-purple/20 flex items-center justify-center flex-shrink-0">
+                  <FileText className="w-6 h-6 text-roast-purple" />
+                </div>
+                <div className="overflow-hidden">
+                  <p className="font-medium text-white truncate">{file.name}</p>
+                  <p className="text-sm text-white/60">
+                    {(file.size / 1024 / 1024).toFixed(2)} MB • PDF
+                  </p>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="py-6 space-y-6">
+              <div className="text-center">
+                <h3 className="text-xl font-medium mb-2 text-gradient">Analyzing your pitch deck</h3>
+                <p className="text-white/70 text-md h-8">{loadingMessage}</p>
+              </div>
+              
+              <div className="space-y-2">
+                <Progress value={progress} className="h-3 bg-white/10" />
+                <p className="text-right text-xs text-white/40">{progress}%</p>
+              </div>
             </div>
-            <div className="overflow-hidden">
-              <p className="font-medium text-white truncate">{file.name}</p>
-              <p className="text-sm text-white/60">
-                {(file.size / 1024 / 1024).toFixed(2)} MB • PDF
-              </p>
-            </div>
-          </div>
+          )}
         </div>
       )}
     </div>
