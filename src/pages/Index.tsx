@@ -1,8 +1,10 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '@/components/Logo';
 import FileUploader from '@/components/FileUploader';
 import TextBubble from '@/components/TextBubble';
+import SignupForm from '@/components/SignupForm';
 import { Button } from '@/components/ui/button';
 import { MessageSquareHeart } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -45,8 +47,22 @@ const Index = () => {
             </p>
           </div>
           
-          {/* File Upload Area */}
-          <div className="w-full max-w-2xl mx-auto my-8">
+          {/* Primary CTA - Email Signup */}
+          <div className="w-full max-w-xl mx-auto mt-4 mb-8 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 shadow-lg">
+            <h2 className="text-xl md:text-2xl font-bold text-gradient mb-4 text-center">
+              Get personalized feedback from top investors
+            </h2>
+            <p className="text-white/70 mb-6 text-center">
+              Skip the line and receive detailed insights directly to your inbox
+            </p>
+            <SignupForm />
+          </div>
+          
+          {/* Secondary CTA - File Upload Area */}
+          <div className="w-full max-w-2xl mx-auto">
+            <div className="text-center mb-4">
+              <h3 className="text-lg font-medium text-white/90">Or try our instant roast</h3>
+            </div>
             <FileUploader 
               onFileUpload={(file) => console.log("File uploaded:", file.name)}
               onAnalysisComplete={handleAnalysisComplete}
