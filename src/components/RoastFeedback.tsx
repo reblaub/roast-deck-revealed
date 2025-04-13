@@ -1,6 +1,5 @@
 import React from 'react';
-import { Flame, FileCheck, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Flame, FileCheck } from 'lucide-react';
 import EmailCapture from './EmailCapture';
 import AnalysisPieChart from './AnalysisPieChart';
 
@@ -74,15 +73,6 @@ const RoastFeedback: React.FC<RoastFeedbackProps> = ({ fileName }) => {
       </div>
 
       <AnalysisPieChart fileName={fileName} className="mb-8" />
-
-      <div className="p-4 border border-roast-purple/20 rounded-lg bg-roast-purple/5 backdrop-blur-sm mb-8">
-        <p className="text-white text-center">
-          For personalized feedback from top investors who've funded unicorns, drop your email below.
-        </p>
-        <p className="text-white/60 text-sm text-center mt-1">
-          We'll contact you.
-        </p>
-      </div>
 
       <EmailCapture />
     </div>
