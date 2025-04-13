@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Users } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -72,6 +71,24 @@ const InvestorCarousel: React.FC = () => {
       title: "CEO", 
       company: "Social Capital",
       imageUrl: "https://pbs.twimg.com/profile_images/1455606877418692611/FXzZ9ytv_400x400.jpg"
+    },
+    { 
+      name: "Xavier Niel", 
+      title: "Founder", 
+      company: "Free, Station F",
+      imageUrl: "https://pbs.twimg.com/profile_images/1229354916218048512/OComboem_400x400.jpg"
+    },
+    { 
+      name: "Jean de la Rochebrochard", 
+      title: "Partner", 
+      company: "Kima Ventures",
+      imageUrl: "https://pbs.twimg.com/profile_images/1349023935996153857/CMKoyCXI_400x400.jpg"
+    },
+    { 
+      name: "Guillaume Moubeche", 
+      title: "Co-founder", 
+      company: "Lemlist",
+      imageUrl: "https://pbs.twimg.com/profile_images/1473670425/g_400x400.jpg"
     },
   ];
 
