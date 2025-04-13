@@ -47,26 +47,27 @@ const Index = () => {
             </p>
           </div>
           
-          {/* Primary CTA - Email Signup */}
-          <div className="w-full max-w-xl mx-auto mt-4 mb-8 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 shadow-lg">
-            <h2 className="text-xl md:text-2xl font-bold text-gradient mb-4 text-center">
-              Get personalized feedback from top investors
-            </h2>
-            <p className="text-white/70 mb-6 text-center">
-              Skip the line and receive detailed insights directly to your inbox
-            </p>
-            <SignupForm />
-          </div>
-          
-          {/* Secondary CTA - File Upload Area */}
+          {/* Primary CTA - File Upload Area */}
           <div className="w-full max-w-2xl mx-auto">
             <div className="text-center mb-4">
-              <h3 className="text-lg font-medium text-white/90">Or try our instant roast</h3>
+              <h3 className="text-xl font-semibold text-white">Try our free instant roast</h3>
+              <p className="text-white/70 mt-1">Upload your deck and get immediate feedback</p>
             </div>
             <FileUploader 
               onFileUpload={(file) => console.log("File uploaded:", file.name)}
               onAnalysisComplete={handleAnalysisComplete}
             />
+          </div>
+          
+          {/* Secondary CTA - Email Signup for premium feedback */}
+          <div className="w-full max-w-xl mx-auto mt-8 mb-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 shadow-lg">
+            <h2 className="text-xl md:text-2xl font-bold text-gradient mb-4 text-center">
+              Want slide-by-slide expert feedback?
+            </h2>
+            <p className="text-white/70 mb-6 text-center">
+              Get personalized insights from top investors directly to your inbox
+            </p>
+            <SignupForm />
           </div>
           
           {/* Link to Ego Dump */}
