@@ -19,7 +19,7 @@ const defaultData: PieChartData[] = [
     name: 'Unicorn Potential', 
     value: 35, 
     color: '#FF6B6B',
-    description: 'Probability of becoming the next unicorn (or at least that's what your mom thinks).'
+    description: 'Probability of becoming the next unicorn (or at least that\'s what your mom thinks).'
   },
   { 
     name: 'LinkedIn Fame vs Reality Gap', 
@@ -58,7 +58,7 @@ const generateRandomData = (fileName: string): PieChartData[] => {
       name: 'Unicorn Potential', 
       value: Math.max(15, Math.min(55, 30 + (seed % 30))), 
       color: '#FF6B6B',
-      description: 'Probability of becoming the next unicorn (or at least that's what your mom thinks).'
+      description: 'Probability of becoming the next unicorn (or at least that\'s what your mom thinks).'
     },
     { 
       name: 'LinkedIn Fame vs Reality Gap', 
