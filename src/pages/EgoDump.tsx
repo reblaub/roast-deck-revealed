@@ -1,5 +1,6 @@
+
 import React, { useState, useRef } from 'react';
-import { Share2, Heart, ChevronDown, Send, ThumbsUp } from 'lucide-react';
+import { Share2, Heart, ChevronDown, Send, ThumbsUp, Scroll } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -65,6 +66,7 @@ const EgoDump = () => {
   const [newStory, setNewStory] = useState('');
   const [author, setAuthor] = useState('');
   const rejectionListRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -105,6 +107,31 @@ const EgoDump = () => {
 
   const scrollToRejections = () => {
     rejectionListRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const scrollToNext = () => {
+    if (scrollAreaRef.current) {
+      const currentScroll = scrollAreaRef.current.scrollTop;
+      const scrollHeight = scrollAreaRef.current.scrollHeight;
+      const clientHeight = scrollAreaRef.current.clientHeight;
+      
+      // Calculate scroll amount (approximately 2 cards)
+      const scrollAmount = Math.min(300, scrollHeight - clientHeight - currentScroll);
+      
+      if (scrollAmount > 0) {
+        scrollAreaRef.current.scrollBy({
+          top: scrollAmount,
+          behavior: 'smooth'
+        });
+      } else {
+        // If we're at the bottom, scroll back to top
+        scrollAreaRef.current.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+        toast("Back to the top!");
+      }
+    }
   };
 
   return (
@@ -192,54 +219,72 @@ const EgoDump = () => {
           </form>
         </Card>
 
-        <div ref={rejectionListRef} className="max-w-2xl mx-auto space-y-6 mb-16 sm:mb-24">
+        <div ref={rejectionListRef} className="max-w-2xl mx-auto space-y-6 mb-16 sm:mb-24 relative">
           <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent mb-6 sm:mb-8 flex items-center">
             <span className="text-roast-orange mr-2">🔥</span> 
             Rejection Wall of Fame
           </h2>
           
-          <ScrollArea className="max-h-[500px] sm:max-h-[600px] pr-4">
-            <div className="space-y-4 sm:space-y-6">
-              {rejections.map((rejection, index) => (
-                <Card 
-                  key={rejection.id} 
-                  className={`bg-gradient-to-br from-black/90 to-black/70 border border-white/10 shadow-lg overflow-hidden backdrop-blur-sm transition-all hover:border-white/20 hover:shadow-xl`}
-                >
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-white/90 text-base sm:text-lg flex items-center">
-                      <span className="bg-gradient-to-br from-roast-purple/20 to-roast-blue/20 text-white h-7 sm:h-8 w-7 sm:w-8 rounded-full flex items-center justify-center mr-3 text-sm">
-                        {rejection.author.charAt(0).toUpperCase()}
-                      </span>
-                      {rejection.author}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-white/80 italic text-sm sm:text-base">{rejection.story}</p>
-                  </CardContent>
-                  <CardFooter className="flex justify-between text-white/60 pt-2">
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      onClick={() => handleLike(rejection.id)}
-                      className={`transition-colors ${rejection.liked ? "text-roast-pink" : "text-white/60 hover:text-roast-pink/70"}`}
-                    >
-                      <Heart className="mr-1 h-4 w-4" fill={rejection.liked ? "currentColor" : "none"} />
-                      {rejection.likes}
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      onClick={() => handleShare(rejection.story)}
-                      className="text-white/60 hover:text-roast-blue/70 transition-colors"
-                    >
-                      <Share2 className="mr-1 h-4 w-4" />
-                      Share
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ))}
+          <div className="relative">
+            <ScrollArea 
+              className="max-h-[500px] sm:max-h-[600px] pr-4"
+              ref={scrollAreaRef as React.RefObject<HTMLDivElement>}
+            >
+              <div className="space-y-4 sm:space-y-6">
+                {rejections.map((rejection, index) => (
+                  <Card 
+                    key={rejection.id} 
+                    className={`bg-gradient-to-br from-black/90 to-black/70 border border-white/10 shadow-lg overflow-hidden backdrop-blur-sm transition-all hover:border-white/20 hover:shadow-xl`}
+                  >
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-white/90 text-base sm:text-lg flex items-center">
+                        <span className="bg-gradient-to-br from-roast-purple/20 to-roast-blue/20 text-white h-7 sm:h-8 w-7 sm:w-8 rounded-full flex items-center justify-center mr-3 text-sm">
+                          {rejection.author.charAt(0).toUpperCase()}
+                        </span>
+                        {rejection.author}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-white/80 italic text-sm sm:text-base">{rejection.story}</p>
+                    </CardContent>
+                    <CardFooter className="flex justify-between text-white/60 pt-2">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => handleLike(rejection.id)}
+                        className={`transition-colors ${rejection.liked ? "text-roast-pink" : "text-white/60 hover:text-roast-pink/70"}`}
+                      >
+                        <Heart className="mr-1 h-4 w-4" fill={rejection.liked ? "currentColor" : "none"} />
+                        {rejection.likes}
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => handleShare(rejection.story)}
+                        className="text-white/60 hover:text-roast-blue/70 transition-colors"
+                      >
+                        <Share2 className="mr-1 h-4 w-4" />
+                        Share
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            </ScrollArea>
+            
+            {/* Scroll Button */}
+            <div className="flex justify-center mt-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={scrollToNext}
+                className="border-white/10 bg-black/40 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 text-white/80 hover:text-white transition-all group"
+              >
+                <Scroll className="h-4 w-4 mr-2 group-hover:animate-pulse" />
+                <span>Scroll more stories</span>
+              </Button>
             </div>
-          </ScrollArea>
+          </div>
         </div>
 
         <div className="max-w-3xl mx-auto text-center mb-12 sm:mb-20 relative">
