@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { Share2, Download, ChartPie } from 'lucide-react';
@@ -19,7 +18,7 @@ const defaultData: PieChartData[] = [
     name: 'Unicorn Potential', 
     value: 35, 
     color: '#FF6B6B',
-    description: 'Probability of becoming the next unicorn (or at least that\'s what your mom thinks).'
+    description: "Probability of becoming the next unicorn (or at least that's what your mom thinks)."
   },
   { 
     name: 'LinkedIn Fame vs Reality Gap', 
@@ -53,47 +52,68 @@ const generateRandomData = (fileName: string): PieChartData[] => {
   const seed = fileNameSum % 100;
   
   // Create variability but keep it within reasonable ranges
-  return [
+  const data = [
     { 
       name: 'Unicorn Potential', 
       value: Math.max(15, Math.min(55, 30 + (seed % 30))), 
       color: '#FF6B6B',
-      description: 'Probability of becoming the next unicorn (or at least that\'s what your mom thinks).'
+      description: "Probability of becoming the next unicorn (or at least that's what your mom thinks)."
     },
     { 
       name: 'LinkedIn Fame vs Reality Gap', 
-      value: Math.max(10, Math.min(35, 20 + (seed % 20))), 
+      value: Math.max(10, Math.min(35, 20 + ((seed * 7) % 20))), 
       color: '#4ECDC4',
       description: 'The difference between your LinkedIn presence and actual business results.'
     },
     { 
       name: 'Work-Life Balance Survival', 
-      value: Math.max(5, Math.min(25, 15 + (seed % 15))), 
+      value: Math.max(5, Math.min(25, 15 + ((seed * 3) % 15))), 
       color: '#FFD166',
       description: 'Chance of maintaining any semblance of a personal life while chasing your startup dreams.'
     },
     { 
       name: 'Corporate Return Risk', 
-      value: Math.max(10, Math.min(30, 20 + (seed % 20))), 
+      value: Math.max(10, Math.min(30, 20 + ((seed * 11) % 20))), 
       color: '#6A0572',
       description: 'Probability of ending up back in corporate life within 24 months.'
     },
     { 
       name: 'Investor FOMO Factor', 
-      value: Math.max(5, Math.min(25, 15 + (seed % 15))), 
+      value: Math.max(5, Math.min(25, 15 + ((seed * 5) % 15))), 
       color: '#118AB2',
       description: 'How likely investors are to fund you based purely on fear of missing out.'
     }
   ];
+  
+  // Ensure these numbers are actually different before normalization
+  return data;
 };
 
 // Ensure the data values sum to 100%
 const normalizeData = (data: PieChartData[]): PieChartData[] => {
   const sum = data.reduce((acc, item) => acc + item.value, 0);
-  return data.map(item => ({
+  
+  // Avoid dividing by zero
+  if (sum === 0) return defaultData;
+  
+  // Calculate normalized values
+  const normalizedData = data.map(item => ({
     ...item,
     value: Math.round((item.value / sum) * 100)
   }));
+  
+  // Handle rounding issues to ensure sum is exactly 100
+  const normalizedSum = normalizedData.reduce((acc, item) => acc + item.value, 0);
+  
+  if (normalizedSum !== 100) {
+    // Add or subtract the difference from the largest value
+    const sortedIndices = [...normalizedData.keys()].sort(
+      (a, b) => normalizedData[b].value - normalizedData[a].value
+    );
+    normalizedData[sortedIndices[0]].value += (100 - normalizedSum);
+  }
+  
+  return normalizedData;
 };
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -138,7 +158,8 @@ interface AnalysisPieChartProps {
 const AnalysisPieChart: React.FC<AnalysisPieChartProps> = ({ fileName, className }) => {
   const chartRef = React.useRef<HTMLDivElement>(null);
   const data = React.useMemo(() => {
-    const rawData = fileName ? generateRandomData(fileName) : defaultData;
+    // Use a default filename if none provided to ensure consistent but different values
+    const rawData = fileName ? generateRandomData(fileName) : generateRandomData("Default_Startup_Pitch_Deck");
     return normalizeData(rawData);
   }, [fileName]);
 
