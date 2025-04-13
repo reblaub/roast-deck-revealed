@@ -47,11 +47,9 @@ const defaultData: PieChartData[] = [
 ];
 
 const generateRandomData = (fileName: string): PieChartData[] => {
-  // Generate somewhat random but weighted data based on the filename
   const fileNameSum = fileName.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
   const seed = fileNameSum % 100;
   
-  // Create variability but keep it within reasonable ranges
   const data = [
     { 
       name: 'Unicorn Potential', 
@@ -85,28 +83,22 @@ const generateRandomData = (fileName: string): PieChartData[] => {
     }
   ];
   
-  // Ensure these numbers are actually different before normalization
   return data;
 };
 
-// Ensure the data values sum to 100%
 const normalizeData = (data: PieChartData[]): PieChartData[] => {
   const sum = data.reduce((acc, item) => acc + item.value, 0);
   
-  // Avoid dividing by zero
   if (sum === 0) return defaultData;
   
-  // Calculate normalized values
   const normalizedData = data.map(item => ({
     ...item,
     value: Math.round((item.value / sum) * 100)
   }));
   
-  // Handle rounding issues to ensure sum is exactly 100
   const normalizedSum = normalizedData.reduce((acc, item) => acc + item.value, 0);
   
   if (normalizedSum !== 100) {
-    // Add or subtract the difference from the largest value
     const sortedIndices = [...normalizedData.keys()].sort(
       (a, b) => normalizedData[b].value - normalizedData[a].value
     );
@@ -158,7 +150,6 @@ interface AnalysisPieChartProps {
 const AnalysisPieChart: React.FC<AnalysisPieChartProps> = ({ fileName, className }) => {
   const chartRef = React.useRef<HTMLDivElement>(null);
   const data = React.useMemo(() => {
-    // Use a default filename if none provided to ensure consistent but different values
     const rawData = fileName ? generateRandomData(fileName) : generateRandomData("Default_Startup_Pitch_Deck");
     return normalizeData(rawData);
   }, [fileName]);
@@ -190,18 +181,23 @@ const AnalysisPieChart: React.FC<AnalysisPieChartProps> = ({ fileName, className
   };
 
   const downloadChart = () => {
-    // Create a container for the download image
+    if (!chartRef.current) {
+      toast({
+        title: "Error",
+        description: "Could not find chart to download",
+        variant: "destructive"
+      });
+      return;
+    }
+
     const downloadContainer = document.createElement('div');
     downloadContainer.style.width = '800px';
-    downloadContainer.style.height = '1000px';
-    downloadContainer.style.padding = '40px';
+    downloadContainer.style.height = '600px';
+    downloadContainer.style.padding = '20px';
     downloadContainer.style.backgroundColor = '#1a1a1a';
     downloadContainer.style.color = 'white';
     downloadContainer.style.fontFamily = 'sans-serif';
-    downloadContainer.style.position = 'absolute';
-    downloadContainer.style.left = '-9999px';
     
-    // Add title
     const title = document.createElement('h2');
     title.textContent = 'My Startup Reality Check';
     title.style.textAlign = 'center';
@@ -210,40 +206,20 @@ const AnalysisPieChart: React.FC<AnalysisPieChartProps> = ({ fileName, className
     title.style.color = 'white';
     downloadContainer.appendChild(title);
     
-    // Create a chart container with fixed dimensions
-    const chartContainer = document.createElement('div');
-    chartContainer.style.width = '100%';
-    chartContainer.style.height = '500px';
-    chartContainer.style.position = 'relative';
+    const chartClone = chartRef.current.cloneNode(true) as HTMLElement;
+    chartClone.style.width = '100%';
+    chartClone.style.height = '350px';
+    downloadContainer.appendChild(chartClone);
     
-    // Append temporary container to the body
-    document.body.appendChild(downloadContainer);
-    downloadContainer.appendChild(chartContainer);
-    
-    // Create the actual chart element
-    const chart = document.createElement('div');
-    chart.style.width = '100%';
-    chart.style.height = '100%';
-    chartContainer.appendChild(chart);
-    
-    // Add legend separately
     const legend = document.createElement('div');
     legend.style.padding = '20px';
-    legend.style.marginTop = '30px';
+    legend.style.marginTop = '20px';
     legend.style.border = '1px solid rgba(255,255,255,0.1)';
     legend.style.borderRadius = '8px';
     
-    // Add legend title
-    const legendTitle = document.createElement('h3');
-    legendTitle.textContent = 'Your Startup Reality Analysis';
-    legendTitle.style.marginBottom = '15px';
-    legendTitle.style.color = 'white';
-    legend.appendChild(legendTitle);
-    
-    // Add each data point with description
     data.forEach(item => {
       const itemDiv = document.createElement('div');
-      itemDiv.style.marginBottom = '12px';
+      itemDiv.style.marginBottom = '10px';
       itemDiv.style.display = 'flex';
       itemDiv.style.alignItems = 'flex-start';
       
@@ -253,14 +229,12 @@ const AnalysisPieChart: React.FC<AnalysisPieChartProps> = ({ fileName, className
       colorBox.style.backgroundColor = item.color;
       colorBox.style.marginRight = '10px';
       colorBox.style.marginTop = '3px';
-      colorBox.style.flexShrink = '0';
       
       const textDiv = document.createElement('div');
       
       const itemTitle = document.createElement('div');
       itemTitle.textContent = `${item.name}: ${item.value}%`;
       itemTitle.style.fontWeight = 'bold';
-      itemTitle.style.marginBottom = '4px';
       itemTitle.style.color = 'white';
       
       const itemDesc = document.createElement('div');
@@ -279,7 +253,6 @@ const AnalysisPieChart: React.FC<AnalysisPieChartProps> = ({ fileName, className
     
     downloadContainer.appendChild(legend);
     
-    // Add footer
     const footer = document.createElement('div');
     footer.style.marginTop = '20px';
     footer.style.textAlign = 'center';
@@ -289,62 +262,33 @@ const AnalysisPieChart: React.FC<AnalysisPieChartProps> = ({ fileName, className
     footer.textContent = 'Generated by Roast • Share your startup reality check!';
     downloadContainer.appendChild(footer);
     
-    // Use React to render the PieChart in the chart container
-    import('react-dom/client').then(({ createRoot }) => {
-      const root = createRoot(chart);
-      
-      // Create a component specifically for the download version
-      const DownloadChart = () => (
-        <PieChart width={700} height={500}>
-          <Pie
-            data={data}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            outerRadius={180}
-            innerRadius={80}
-            dataKey="value"
-            label={({ name, value }) => `${name}: ${value}%`}
-          >
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.color} />
-            ))}
-          </Pie>
-        </PieChart>
-      );
-      
-      // Render the chart
-      root.render(<DownloadChart />);
-      
-      // Allow a small delay for the chart to render before capturing
-      setTimeout(() => {
-        toPng(downloadContainer)
-          .then((dataUrl) => {
-            const link = document.createElement('a');
-            link.download = 'startup-reality-check.png';
-            link.href = dataUrl;
-            link.click();
-            
-            // Clean up
-            document.body.removeChild(downloadContainer);
-            
-            toast({
-              title: "Chart downloaded successfully!",
-              description: "Share it on your social media to let investors know you're self-aware."
-            });
-          })
-          .catch((error) => {
-            console.error('Error downloading chart:', error);
-            // Clean up
-            document.body.removeChild(downloadContainer);
-            toast({
-              title: "Download failed",
-              description: "Please try again later.",
-              variant: "destructive",
-            });
-          });
-      }, 1000); // Increased timeout to ensure rendering completes
-    });
+    downloadContainer.style.position = 'absolute';
+    downloadContainer.style.left = '-9999px';
+    document.body.appendChild(downloadContainer);
+    
+    toPng(downloadContainer)
+      .then((dataUrl) => {
+        const link = document.createElement('a');
+        link.download = 'startup-reality-check.png';
+        link.href = dataUrl;
+        link.click();
+        
+        document.body.removeChild(downloadContainer);
+        
+        toast({
+          title: "Chart downloaded successfully!",
+          description: "Share it on your social media to let investors know you're self-aware."
+        });
+      })
+      .catch((error) => {
+        console.error('Error downloading chart:', error);
+        document.body.removeChild(downloadContainer);
+        toast({
+          title: "Download failed",
+          description: "Please try again later.",
+          variant: "destructive",
+        });
+      });
   };
 
   return (
