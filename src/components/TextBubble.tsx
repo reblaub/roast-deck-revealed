@@ -16,7 +16,7 @@ const TextBubble: React.FC<TextBubbleProps> = ({ message, position, className })
     <div 
       className={cn(
         'absolute max-w-[180px] rounded-2xl p-3 text-sm font-medium shadow-md backdrop-blur-sm transition-opacity',
-        isMobile ? 'animate-pulse-slow opacity-50 hover:opacity-80' : 'animate-float opacity-80',
+        isMobile ? 'animate-pulse-slow opacity-30 hover:opacity-70 max-w-[140px] text-xs p-2' : 'animate-float opacity-80',
         position === 'left' 
           ? 'left-4 md:left-8 bg-white text-black' 
           : 'right-4 md:right-8 bg-roast-blue text-white',

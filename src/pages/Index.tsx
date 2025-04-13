@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '@/components/Logo';
@@ -54,7 +53,7 @@ const Index = () => {
             />
           </div>
           
-          {/* Link to Ego Dump - more visible call to action */}
+          {/* Link to Ego Dump */}
           <div className="mt-6">
             <Link to="/ego-dump">
               <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
@@ -78,13 +77,13 @@ const Index = () => {
           </>
         )}
         
-        {/* Show fewer, more spaced bubbles on mobile */}
+        {/* Show fewer, more spaced bubbles on mobile and reposition them to avoid overlapping with main content */}
         {!analysisComplete && isMobile && (
           <>
-            <TextBubble message="I fell asleep at slide 2" position="left" className="top-[20%]" />
-            <TextBubble message="What's your TAM?" position="right" className="top-[35%]" />
-            <TextBubble message="This hurts my eyes" position="left" className="top-[50%]" />
-            <TextBubble message="If the message isn't in the title, not reading it" position="right" className="top-[65%]" />
+            <TextBubble message="I fell asleep at slide 2" position="left" className="top-[15%]" />
+            <TextBubble message="This hurts my eyes" position="right" className="top-[30%]" />
+            <TextBubble message="What's your TAM?" position="left" className="top-[70%]" />
+            <TextBubble message="If the message isn't in the title, not reading it" position="right" className="top-[85%]" />
           </>
         )}
       </div>
@@ -96,7 +95,7 @@ const Index = () => {
         </div>
       </footer>
       
-      {/* Gradient Orbs (Background Effects) */}
+      {/* Gradient Orbs */}
       <div className="fixed top-20 left-20 w-96 h-96 rounded-full bg-roast-purple/10 blur-3xl opacity-20 animate-pulse-slow" />
       <div className="fixed bottom-20 right-20 w-96 h-96 rounded-full bg-roast-orange/10 blur-3xl opacity-20 animate-pulse-slow" />
     </div>
