@@ -65,10 +65,10 @@ const ChartActions: React.FC<ChartActionsProps> = ({ data, chartRef }) => {
   };
 
   return (
-    <div className="flex justify-center gap-4">
+    <div className="flex flex-col sm:flex-row justify-center gap-4 mt-2">
       <Button 
         onClick={handleShare} 
-        className="bg-roast-blue hover:bg-roast-blue/80"
+        className="bg-gradient-to-r from-roast-blue to-roast-blue/80 hover:opacity-90 border border-white/10"
         variant="default"
       >
         <Share2 className="mr-2 h-4 w-4" />
@@ -76,11 +76,11 @@ const ChartActions: React.FC<ChartActionsProps> = ({ data, chartRef }) => {
       </Button>
       <Button 
         onClick={downloadChart} 
-        className="bg-roast-purple hover:bg-roast-purple/80"
+        className="bg-gradient-to-r from-roast-purple to-roast-purple/80 hover:opacity-90 border border-white/10"
         variant="default"
       >
         <Download className="mr-2 h-4 w-4" />
-        Download
+        Download Chart
       </Button>
     </div>
   );

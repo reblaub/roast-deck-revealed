@@ -66,6 +66,26 @@
   .logo-gradient {
     @apply bg-gradient-to-r from-roast-purple via-roast-blue to-roast-orange bg-clip-text text-transparent;
   }
+  
+  .skew-y-1 {
+    transform: skewY(-1deg);
+  }
+  
+  .unskew-y-1 {
+    transform: skewY(1deg);
+  }
+  
+  .delay-1000 {
+    animation-delay: 1s;
+  }
+  
+  .delay-2000 {
+    animation-delay: 2s;
+  }
+  
+  .delay-3000 {
+    animation-delay: 3s;
+  }
 }
 
 @keyframes float {
@@ -80,4 +100,33 @@
 .animate-float {
   animation: float 5s ease-in-out infinite;
   animation-delay: calc(var(--delay, 0) * 1s);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, rgba(155, 135, 245, 0.3), rgba(249, 115, 22, 0.3));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, rgba(155, 135, 245, 0.5), rgba(249, 115, 22, 0.5));
+}
+
+/* Additional animations */
+@keyframes subtle-pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.3;
+  }
 }
