@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Share2, Heart, ChevronDown, Send, ThumbsUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,7 +7,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 import Logo from '@/components/Logo';
 
-// More varied and harsher rejection stories
 const initialRejections = [
   {
     id: 1,
@@ -108,19 +106,17 @@ const EgoDump = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col relative">
-      {/* Decorative elements */}
-      <div className="absolute w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-roast-orange/10 blur-3xl opacity-20 animate-pulse-slow" />
-        <div className="absolute top-1/3 -left-32 w-64 h-64 rounded-full bg-roast-blue/10 blur-3xl opacity-20 animate-pulse-slow delay-1000" />
-        <div className="absolute bottom-1/4 right-0 w-96 h-96 rounded-full bg-roast-purple/10 blur-3xl opacity-30 animate-pulse-slow delay-2000" />
-        <div className="absolute bottom-0 left-1/4 w-64 h-64 rounded-full bg-roast-pink/10 blur-3xl opacity-20 animate-pulse-slow delay-3000" />
+    <div className="min-h-screen bg-black text-white flex flex-col relative overflow-x-hidden">
+      <div className="absolute w-full h-full overflow-hidden pointer-events-none z-0">
+        <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-roast-orange/20 blur-3xl opacity-40 animate-pulse-slow" />
+        <div className="absolute top-1/3 -left-32 w-64 h-64 rounded-full bg-roast-blue/20 blur-3xl opacity-40 animate-pulse-slow delay-1000" />
+        <div className="absolute bottom-1/4 right-0 w-96 h-96 rounded-full bg-roast-purple/20 blur-3xl opacity-50 animate-pulse-slow delay-2000" />
+        <div className="absolute bottom-0 left-1/4 w-64 h-64 rounded-full bg-roast-pink/20 blur-3xl opacity-40 animate-pulse-slow delay-3000" />
       </div>
       
       <div className="w-full max-w-7xl mx-auto px-6 py-16 relative z-10">
-        {/* Header Section with angled design */}
-        <div className="relative overflow-hidden mb-20 skew-y-1">
-          <div className="unskew-y-1 text-center relative z-10">
+        <div className="relative overflow-hidden mb-20 bg-black/70 backdrop-blur-sm rounded-xl p-8">
+          <div className="text-center relative z-10">
             <div className="mb-6">
               <Logo className="mx-auto scale-125" />
             </div>
@@ -129,29 +125,27 @@ const EgoDump = () => {
               <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-roast-orange via-roast-purple to-roast-blue bg-clip-text text-transparent animate-gradient-x">
                 The Ego Dump
               </h1>
-              <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-40 h-40 rounded-full bg-roast-orange/20 blur-3xl opacity-30 animate-pulse-slow" />
+              <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-40 h-40 rounded-full bg-roast-orange/30 blur-3xl opacity-50 animate-pulse-slow" />
             </div>
             
             <div className="max-w-2xl mx-auto relative">
-              <p className="text-xl md:text-2xl text-white/90 mb-4 font-light">
+              <p className="text-xl md:text-2xl text-white mb-4 font-light">
                 Even the biggest success stories faced countless rejections.
               </p>
-              <p className="text-lg text-white/70 mb-6">
+              <p className="text-lg text-white/80 mb-6">
                 Your pitch deck might be perfect, but rejection is part of the journey.
                 Share your best "rejection excuse" from VCs or angel investors.
               </p>
               
-              {/* Fire line divider */}
               <div className="flex items-center justify-center my-10">
-                <div className="h-px w-1/3 bg-gradient-to-r from-transparent via-roast-orange/50 to-transparent" />
-                <div className="mx-4 text-roast-orange">🔥</div>
-                <div className="h-px w-1/3 bg-gradient-to-r from-transparent via-roast-orange/50 to-transparent" />
+                <div className="h-px w-1/3 bg-gradient-to-r from-transparent via-roast-orange to-transparent" />
+                <div className="mx-4 text-roast-orange text-2xl">🔥</div>
+                <div className="h-px w-1/3 bg-gradient-to-r from-transparent via-roast-orange to-transparent" />
               </div>
             </div>
           </div>
         </div>
           
-        {/* Scroll down button */}
         <div className="text-center mb-12">
           <Button 
             variant="ghost" 
@@ -163,7 +157,6 @@ const EgoDump = () => {
           </Button>
         </div>
 
-        {/* Story Submission Form - Redesigned */}
         <Card className="bg-gradient-to-br from-black via-black/95 to-black/80 border border-white/10 shadow-lg mb-16 max-w-2xl mx-auto overflow-hidden relative">
           <div className="absolute inset-0 bg-gradient-to-br from-roast-purple/5 to-roast-orange/5 pointer-events-none" />
           
@@ -197,7 +190,6 @@ const EgoDump = () => {
           </form>
         </Card>
 
-        {/* Rejections List */}
         <div ref={rejectionListRef} className="max-w-2xl mx-auto space-y-6 mb-24">
           <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent mb-8 flex items-center">
             <span className="text-roast-orange mr-2">🔥</span> 
@@ -248,7 +240,6 @@ const EgoDump = () => {
           </ScrollArea>
         </div>
 
-        {/* Inspirational Quote - Redesigned */}
         <div className="max-w-3xl mx-auto text-center mb-20 relative">
           <div className="absolute inset-0 bg-gradient-to-r from-roast-purple/5 via-transparent to-roast-orange/5 rounded-xl pointer-events-none" />
           
@@ -262,9 +253,8 @@ const EgoDump = () => {
         </div>
       </div>
       
-      {/* Footer */}
-      <footer className="py-8 border-t border-white/10 mt-auto relative z-10">
-        <div className="container text-center text-white/40 text-sm">
+      <footer className="py-8 border-t border-white/20 mt-auto relative z-10 bg-black/50 backdrop-blur-sm">
+        <div className="container text-center text-white/60 text-sm">
           <p>© {new Date().getFullYear()} Roast. All rights reserved.</p>
         </div>
       </footer>
