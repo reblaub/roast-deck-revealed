@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 import Logo from '@/components/Logo';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const initialRejections = [
   {
@@ -64,6 +65,7 @@ const EgoDump = () => {
   const [newStory, setNewStory] = useState('');
   const [author, setAuthor] = useState('');
   const rejectionListRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,39 +116,39 @@ const EgoDump = () => {
         <div className="absolute bottom-0 left-1/4 w-64 h-64 rounded-full bg-roast-pink/20 blur-3xl opacity-40 animate-pulse-slow delay-3000" />
       </div>
       
-      <div className="w-full max-w-7xl mx-auto px-6 py-16 relative z-10">
-        <div className="relative overflow-hidden mb-20 bg-black/70 backdrop-blur-sm rounded-xl p-8">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16 relative z-10">
+        <div className="relative overflow-hidden mb-12 sm:mb-20 bg-black/70 backdrop-blur-sm rounded-xl p-4 sm:p-8">
           <div className="text-center relative z-10">
             <div className="mb-6">
-              <Logo className="mx-auto scale-125" />
+              <Logo className="mx-auto scale-110 sm:scale-125" />
             </div>
             
             <div className="relative">
-              <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-roast-orange via-roast-purple to-roast-blue bg-clip-text text-transparent animate-gradient-x tracking-tighter">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 sm:mb-8 bg-gradient-to-r from-roast-orange via-roast-purple to-roast-blue bg-clip-text text-transparent animate-gradient-x tracking-tighter">
                 The Ego Dump
               </h1>
-              <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-40 h-40 rounded-full bg-roast-orange/30 blur-3xl opacity-50 animate-pulse-slow" />
+              <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-28 sm:w-40 h-28 sm:h-40 rounded-full bg-roast-orange/30 blur-3xl opacity-50 animate-pulse-slow" />
             </div>
             
             <div className="max-w-2xl mx-auto relative">
-              <p className="text-xl md:text-2xl text-white mb-4 font-light">
+              <p className="text-lg sm:text-xl md:text-2xl text-white mb-3 sm:mb-4 font-light">
                 Even the biggest success stories faced countless rejections.
               </p>
-              <p className="text-lg text-white/80 mb-6">
+              <p className="text-base sm:text-lg text-white/80 mb-4 sm:mb-6">
                 Your pitch deck might be perfect, but rejection is part of the journey.
                 Share your best "rejection excuse" from VCs or angel investors.
               </p>
               
-              <div className="flex items-center justify-center my-10">
+              <div className="flex items-center justify-center my-6 sm:my-10">
                 <div className="h-px w-1/3 bg-gradient-to-r from-transparent via-roast-orange to-transparent" />
-                <div className="mx-4 text-roast-orange text-2xl">🔥</div>
+                <div className="mx-4 text-roast-orange text-xl sm:text-2xl">🔥</div>
                 <div className="h-px w-1/3 bg-gradient-to-r from-transparent via-roast-orange to-transparent" />
               </div>
             </div>
           </div>
         </div>
           
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
           <Button 
             variant="ghost" 
             className="animate-float text-white/60 hover:text-white hover:bg-white/10 group"
@@ -157,11 +159,11 @@ const EgoDump = () => {
           </Button>
         </div>
 
-        <Card className="bg-gradient-to-br from-black via-black/95 to-black/80 border border-white/10 shadow-lg mb-16 max-w-2xl mx-auto overflow-hidden relative">
+        <Card className="bg-gradient-to-br from-black via-black/95 to-black/80 border border-white/10 shadow-lg mb-10 sm:mb-16 max-w-2xl mx-auto overflow-hidden relative">
           <div className="absolute inset-0 bg-gradient-to-br from-roast-purple/5 to-roast-orange/5 pointer-events-none" />
           
           <CardHeader className="pb-2 relative">
-            <CardTitle className="text-gradient text-2xl">Share Your Rejection</CardTitle>
+            <CardTitle className="text-gradient text-xl sm:text-2xl">Share Your Rejection</CardTitle>
             <CardDescription>No judgment. We're all in this together.</CardDescription>
           </CardHeader>
           
@@ -178,7 +180,7 @@ const EgoDump = () => {
                   placeholder="What's the most ridiculous rejection you've received?"
                   value={newStory}
                   onChange={e => setNewStory(e.target.value)}
-                  className="w-full p-4 h-32 bg-white/5 border border-white/10 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-roast-purple/50 transition-all resize-none"
+                  className="w-full p-4 h-28 sm:h-32 bg-white/5 border border-white/10 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-roast-purple/50 transition-all resize-none"
                 />
               </div>
             </CardContent>
@@ -190,29 +192,29 @@ const EgoDump = () => {
           </form>
         </Card>
 
-        <div ref={rejectionListRef} className="max-w-2xl mx-auto space-y-6 mb-24">
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent mb-8 flex items-center">
+        <div ref={rejectionListRef} className="max-w-2xl mx-auto space-y-6 mb-16 sm:mb-24">
+          <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent mb-6 sm:mb-8 flex items-center">
             <span className="text-roast-orange mr-2">🔥</span> 
             Rejection Wall of Fame
           </h2>
           
-          <ScrollArea className="max-h-[600px] pr-4">
-            <div className="space-y-6">
+          <ScrollArea className="max-h-[500px] sm:max-h-[600px] pr-4">
+            <div className="space-y-4 sm:space-y-6">
               {rejections.map((rejection, index) => (
                 <Card 
                   key={rejection.id} 
                   className={`bg-gradient-to-br from-black/90 to-black/70 border border-white/10 shadow-lg overflow-hidden backdrop-blur-sm transition-all hover:border-white/20 hover:shadow-xl`}
                 >
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-white/90 text-lg flex items-center">
-                      <span className="bg-gradient-to-br from-roast-purple/20 to-roast-blue/20 text-white h-8 w-8 rounded-full flex items-center justify-center mr-3 text-sm">
+                    <CardTitle className="text-white/90 text-base sm:text-lg flex items-center">
+                      <span className="bg-gradient-to-br from-roast-purple/20 to-roast-blue/20 text-white h-7 sm:h-8 w-7 sm:w-8 rounded-full flex items-center justify-center mr-3 text-sm">
                         {rejection.author.charAt(0).toUpperCase()}
                       </span>
                       {rejection.author}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-white/80 italic">{rejection.story}</p>
+                    <p className="text-white/80 italic text-sm sm:text-base">{rejection.story}</p>
                   </CardContent>
                   <CardFooter className="flex justify-between text-white/60 pt-2">
                     <Button 
@@ -240,20 +242,20 @@ const EgoDump = () => {
           </ScrollArea>
         </div>
 
-        <div className="max-w-3xl mx-auto text-center mb-20 relative">
+        <div className="max-w-3xl mx-auto text-center mb-12 sm:mb-20 relative">
           <div className="absolute inset-0 bg-gradient-to-r from-roast-purple/5 via-transparent to-roast-orange/5 rounded-xl pointer-events-none" />
           
-          <div className="p-8 border border-white/5 rounded-xl backdrop-blur-sm">
-            <div className="text-5xl text-white/30 mb-4">"</div>
-            <blockquote className="italic text-xl text-white/80 mb-6">
+          <div className="p-4 sm:p-8 border border-white/5 rounded-xl backdrop-blur-sm">
+            <div className="text-4xl sm:text-5xl text-white/30 mb-3 sm:mb-4">"</div>
+            <blockquote className="italic text-lg sm:text-xl text-white/80 mb-4 sm:mb-6">
               I've missed more than 9,000 shots in my career. I've lost almost 300 games. Twenty-six times I've been trusted to take the game-winning shot and missed. I've failed over and over and over again in my life. And that is why I succeed.
             </blockquote>
-            <cite className="text-white/60 text-lg">— Michael Jordan</cite>
+            <cite className="text-white/60 text-base sm:text-lg">— Michael Jordan</cite>
           </div>
         </div>
       </div>
       
-      <footer className="py-8 border-t border-white/20 mt-auto relative z-10 bg-black/50 backdrop-blur-sm">
+      <footer className="py-6 sm:py-8 border-t border-white/20 mt-auto relative z-10 bg-black/50 backdrop-blur-sm">
         <div className="container text-center text-white/60 text-sm">
           <p>© {new Date().getFullYear()} Roast. All rights reserved.</p>
         </div>

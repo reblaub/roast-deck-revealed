@@ -6,9 +6,11 @@ import FileUploader from '@/components/FileUploader';
 import TextBubble from '@/components/TextBubble';
 import { Button } from '@/components/ui/button';
 import { MessageSquareHeart } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Index = () => {
   const [analysisComplete, setAnalysisComplete] = useState(false);
+  const isMobile = useIsMobile();
 
   const handleAnalysisComplete = () => {
     setAnalysisComplete(true);
@@ -64,7 +66,7 @@ const Index = () => {
         </div>
         
         {/* Only show text bubbles on initial state, not after analysis */}
-        {!analysisComplete && (
+        {!analysisComplete && !isMobile && (
           <>
             <TextBubble message="I fell asleep at slide 2" position="left" className="top-[28%] left-[10%]" />
             <TextBubble message="After 6 slides I still don't know what the product is" position="right" className="top-[22%] right-[10%]" />
@@ -73,6 +75,16 @@ const Index = () => {
             <TextBubble message="I don't see any GtM slides, why?" position="left" className="top-[52%] left-[12%]" />
             <TextBubble message="If the slide message isn't in the title, not gonna read it" position="right" className="top-[48%] right-[12%]" />
             <TextBubble message="Slide 8, my grandma could make a better design" position="left" className="top-[60%] left-[14%]" />
+          </>
+        )}
+        
+        {/* Show fewer, more spaced bubbles on mobile */}
+        {!analysisComplete && isMobile && (
+          <>
+            <TextBubble message="I fell asleep at slide 2" position="left" className="top-[20%]" />
+            <TextBubble message="What's your TAM?" position="right" className="top-[35%]" />
+            <TextBubble message="This hurts my eyes" position="left" className="top-[50%]" />
+            <TextBubble message="If the message isn't in the title, not reading it" position="right" className="top-[65%]" />
           </>
         )}
       </div>
