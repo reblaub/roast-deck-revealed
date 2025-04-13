@@ -39,6 +39,19 @@ const ChartActions: React.FC<ChartActionsProps> = ({ data, chartRef }) => {
   };
 
   const downloadChart = () => {
+    // Add console logging for debugging
+    console.log("Download chart clicked");
+    console.log("Chart ref exists:", !!chartRef.current);
+    
+    if (!chartRef.current) {
+      toast({
+        title: "Error",
+        description: "Chart reference not found",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     downloadChartAsImage(chartRef, data);
   };
 
