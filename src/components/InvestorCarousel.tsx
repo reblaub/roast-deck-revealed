@@ -11,67 +11,67 @@ interface Investor {
 }
 
 const InvestorCarousel: React.FC = () => {
-  // Sample investor data with profile images
+  // Sample investor data with actual profile images
   const investors: Investor[] = [
     { 
       name: "Marc Andreessen", 
       title: "Co-founder", 
       company: "Andreessen Horowitz",
-      imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+      imageUrl: "https://pbs.twimg.com/profile_images/1622307688302632962/n4p8g4zF_400x400.jpg"
     },
     { 
       name: "Paul Graham", 
       title: "Co-founder", 
       company: "Y Combinator",
-      imageUrl: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+      imageUrl: "https://pbs.twimg.com/profile_images/1824002576/pg-railsconf_400x400.jpg"
     },
     { 
       name: "Alexis Ohanian", 
       title: "Co-founder", 
       company: "Reddit & Seven Seven Six",
-      imageUrl: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+      imageUrl: "https://pbs.twimg.com/profile_images/1754864807753474048/7QQvGnGU_400x400.jpg"
     },
     { 
       name: "Garry Tan", 
       title: "President & CEO", 
       company: "Y Combinator",
-      imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+      imageUrl: "https://pbs.twimg.com/profile_images/1710301089875816448/WJZrrY-e_400x400.jpg"
     },
     { 
       name: "Sarah Tavel", 
       title: "General Partner", 
       company: "Benchmark",
-      imageUrl: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+      imageUrl: "https://pbs.twimg.com/profile_images/1485630043748503560/p40k5Gmi_400x400.jpg"
     },
     { 
       name: "Fred Wilson", 
       title: "Co-founder", 
       company: "Union Square Ventures",
-      imageUrl: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+      imageUrl: "https://pbs.twimg.com/profile_images/1129000778137300992/Zkek0UD7_400x400.png"
     },
     { 
       name: "Bill Gurley", 
       title: "General Partner", 
       company: "Benchmark",
-      imageUrl: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+      imageUrl: "https://pbs.twimg.com/profile_images/1756071581577302016/U2GvIuIl_400x400.jpg"
     },
     { 
       name: "Mary Meeker", 
       title: "Founder", 
       company: "Bond Capital",
-      imageUrl: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+      imageUrl: "https://bond.tech/wp-content/uploads/2022/04/Mary_Meeker-4.jpg"
     },
     { 
       name: "Naval Ravikant", 
       title: "Co-founder", 
       company: "AngelList",
-      imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+      imageUrl: "https://pbs.twimg.com/profile_images/1720821605398499328/TzK9tXpE_400x400.jpg"
     },
     { 
       name: "Chamath Palihapitiya", 
       title: "CEO", 
       company: "Social Capital",
-      imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+      imageUrl: "https://pbs.twimg.com/profile_images/1455606877418692611/FXzZ9ytv_400x400.jpg"
     },
   ];
 
