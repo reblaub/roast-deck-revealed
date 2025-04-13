@@ -1,8 +1,11 @@
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Logo from '@/components/Logo';
 import FileUploader from '@/components/FileUploader';
 import TextBubble from '@/components/TextBubble';
+import { Button } from '@/components/ui/button';
+import { MessageSquareHeart } from 'lucide-react';
 
 const Index = () => {
   const [analysisComplete, setAnalysisComplete] = useState(false);
@@ -14,6 +17,16 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col overflow-hidden relative">
       <div className="w-full max-w-7xl mx-auto px-6 py-8">
+        {/* Header with navigation */}
+        <div className="flex justify-end mb-4">
+          <Link to="/ego-dump">
+            <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/10">
+              <MessageSquareHeart className="mr-2 h-5 w-5" />
+              <span>The Ego Dump</span>
+            </Button>
+          </Link>
+        </div>
+        
         {/* Hero Section */}
         <div className="flex flex-col items-center justify-center min-h-[80vh] py-16 gap-10">
           {/* Logo */}
@@ -37,6 +50,16 @@ const Index = () => {
               onFileUpload={(file) => console.log("File uploaded:", file.name)}
               onAnalysisComplete={handleAnalysisComplete}
             />
+          </div>
+          
+          {/* Link to Ego Dump - more visible call to action */}
+          <div className="mt-6">
+            <Link to="/ego-dump">
+              <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+                <MessageSquareHeart className="mr-2 h-5 w-5" />
+                <span>Share your rejection stories</span>
+              </Button>
+            </Link>
           </div>
         </div>
         

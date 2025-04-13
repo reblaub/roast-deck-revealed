@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import InvestorCarousel from "@/components/InvestorCarousel";
 import Index from "./pages/Index";
+import EgoDump from "./pages/EgoDump";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,11 @@ const App = () => (
           <Route path="/" element={
             <AppLayout>
               <Index />
+            </AppLayout>
+          } />
+          <Route path="/ego-dump" element={
+            <AppLayout>
+              <EgoDump />
             </AppLayout>
           } />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
