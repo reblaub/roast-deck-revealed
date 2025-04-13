@@ -52,7 +52,16 @@ const ChartActions: React.FC<ChartActionsProps> = ({ data, chartRef }) => {
       return;
     }
     
-    downloadChartAsImage(chartRef, data);
+    try {
+      downloadChartAsImage(chartRef, data);
+    } catch (error) {
+      console.error("Error initiating chart download:", error);
+      toast({
+        title: "Download Error",
+        description: "Failed to prepare chart for download.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
