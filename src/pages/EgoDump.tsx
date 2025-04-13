@@ -122,7 +122,7 @@ const EgoDump = () => {
             </div>
             
             <div className="relative">
-              <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-roast-orange via-roast-purple to-roast-blue bg-clip-text text-transparent animate-gradient-x">
+              <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-roast-orange via-roast-purple to-roast-blue bg-clip-text text-transparent animate-gradient-x tracking-tighter">
                 The Ego Dump
               </h1>
               <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-40 h-40 rounded-full bg-roast-orange/30 blur-3xl opacity-50 animate-pulse-slow" />
