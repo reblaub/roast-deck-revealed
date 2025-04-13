@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Flame, FileCheck, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,7 +9,6 @@ interface RoastFeedbackProps {
 }
 
 const RoastFeedback: React.FC<RoastFeedbackProps> = ({ fileName }) => {
-  // More balanced feedback with constructive criticism and humor
   const roastFeedback = [
     {
       section: "Executive Summary",
@@ -59,12 +57,6 @@ const RoastFeedback: React.FC<RoastFeedbackProps> = ({ fileName }) => {
         </div>
       )}
 
-      <div className="mb-8 p-4 border border-white/10 rounded-lg bg-white/5 backdrop-blur-sm">
-        <p className="text-white italic">
-          "Your deck shows potential and you're on the right track! Here are some insights to help you refine your pitch and make investors excited about your vision:"
-        </p>
-      </div>
-      
       <div className="space-y-4 mb-8">
         {roastFeedback.map((item, index) => (
           <div 
@@ -81,7 +73,6 @@ const RoastFeedback: React.FC<RoastFeedbackProps> = ({ fileName }) => {
         ))}
       </div>
 
-      {/* Add the pie chart */}
       <AnalysisPieChart fileName={fileName} className="mb-8" />
 
       <div className="p-4 border border-roast-purple/20 rounded-lg bg-roast-purple/5 backdrop-blur-sm mb-8">
@@ -93,7 +84,6 @@ const RoastFeedback: React.FC<RoastFeedbackProps> = ({ fileName }) => {
         </p>
       </div>
 
-      {/* We're using the existing EmailCapture component here */}
       <EmailCapture />
     </div>
   );
