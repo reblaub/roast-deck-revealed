@@ -20,6 +20,13 @@ if (!openAIApiKey) {
   console.error("OpenAI API key not found!");
 }
 
+// The Assistant ID should come from an environment variable
+// This way you can easily switch to a different assistant as you improve it
+const assistantId = Deno.env.get('OPENAI_ASSISTANT_ID') || '';
+if (!assistantId) {
+  console.error("OpenAI Assistant ID not found!");
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -51,60 +58,172 @@ serve(async (req) => {
       });
     }
 
-    // Create a Jean de la Rochebrochard-inspired prompt
-    const prompt = `
-    You are Jean de La Rochebrochard, the CEO of Kima Ventures, known for your direct, no-nonsense approach to pitch deck reviews.
+    const fileName = pitchdeck.file_path?.split('-').slice(1).join('-') || 'Unknown Startup';
     
-    As Jean, you're blunt, sometimes sarcastic, and you've seen thousands of pitch decks, so you can immediately spot the BS. You focus on substance over style and have no patience for inflated metrics, vague value propositions, or unrealistic business plans.
-    
-    You're reviewing a pitch deck for "${pitchdeck.file_path?.split('-').slice(1).join('-') || 'Unknown Startup'}" and need to provide brutally honest feedback in your distinctive voice.
-    
-    Address these key areas with your characteristic directness:
-    - Executive Summary: Cut through the fluff and tell them if their core proposition makes any sense.
-    - Market Size: Challenge any inflated TAM claims - you hate the "if we get 1% of China" approach.
-    - Competitive Analysis: Point out competitors they've conveniently ignored or advantages they've overstated.
-    - Go-to-Market Strategy: Evaluate if they have a realistic plan or just wishful thinking.
-    - Financial Projections: Call out hockey stick projections without solid backing.
-    - Team: Assess whether they have relevant experience or just fancy titles.
-    
-    For each area, provide:
-    1. A brutally honest critique in Jean's voice - direct, sometimes cutting, but always substantive
-    2. A straightforward tip on how to improve - you're tough, but you want founders to succeed if they have something real
-    
-    Your tone is skeptical, direct, and occasionally witty, but with practical advice. You sound like a busy VC who has no time to waste on pleasantries but wants to see good companies succeed.
-    `;
-
-    // Call OpenAI API
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    // Start a new thread
+    const threadResponse = await fetch('https://api.openai.com/v1/threads', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
+        'OpenAI-Beta': 'assistants=v1'
       },
-      body: JSON.stringify({
-        model: 'gpt-4o',  // Using a more powerful model for better mimicry
-        messages: [
-          { role: 'system', content: prompt },
-          { role: 'user', content: 'Please review this pitch deck as Jean de La Rochebrochard of Kima Ventures.' }
-        ],
-        temperature: 0.9, // Higher temperature for more character-specific output
-        max_tokens: 1000, // Allow for longer, more detailed feedback
-      }),
+      body: JSON.stringify({})
     });
-
-    const openaiData = await response.json();
     
-    if (!openaiData.choices || openaiData.choices.length === 0) {
-      console.error("OpenAI API error:", openaiData);
-      return new Response(JSON.stringify({ error: "Failed to generate roast" }), {
+    if (!threadResponse.ok) {
+      const errorData = await threadResponse.text();
+      console.error("Thread creation error:", errorData);
+      return new Response(JSON.stringify({ error: "Failed to create thread" }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
+    
+    const threadData = await threadResponse.json();
+    const threadId = threadData.id;
+    
+    console.log("Created thread:", threadId);
+    
+    // Add a message to the thread
+    const messageResponse = await fetch(`https://api.openai.com/v1/threads/${threadId}/messages`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openAIApiKey}`,
+        'Content-Type': 'application/json',
+        'OpenAI-Beta': 'assistants=v1'
+      },
+      body: JSON.stringify({
+        role: "user",
+        content: `I need you to roast my pitch deck for "${fileName}". 
+Please provide brutally honest feedback on these key areas:
+- Executive Summary
+- Market Size
+- Competitive Analysis
+- Go-to-Market Strategy
+- Financial Projections
+- Team
 
-    // Get the AI assistant's response
-    const roastContent = openaiData.choices[0].message.content;
-
+Each area should have a critique and a tip for improvement.`
+      })
+    });
+    
+    if (!messageResponse.ok) {
+      const errorData = await messageResponse.text();
+      console.error("Message creation error:", errorData);
+      return new Response(JSON.stringify({ error: "Failed to create message" }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+    
+    console.log("Added message to thread");
+    
+    // Run the assistant on the thread
+    const runResponse = await fetch(`https://api.openai.com/v1/threads/${threadId}/runs`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openAIApiKey}`,
+        'Content-Type': 'application/json',
+        'OpenAI-Beta': 'assistants=v1'
+      },
+      body: JSON.stringify({
+        assistant_id: assistantId
+      })
+    });
+    
+    if (!runResponse.ok) {
+      const errorData = await runResponse.text();
+      console.error("Run creation error:", errorData);
+      return new Response(JSON.stringify({ error: "Failed to run assistant" }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+    
+    const runData = await runResponse.json();
+    const runId = runData.id;
+    
+    console.log("Started run:", runId);
+    
+    // Poll for completion
+    let runStatus = runData.status;
+    let maxAttempts = 60; // 5 minutes maximum (checking every 5 seconds)
+    let attempts = 0;
+    
+    while (runStatus !== "completed" && runStatus !== "failed" && runStatus !== "expired" && attempts < maxAttempts) {
+      await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds
+      
+      const checkRunResponse = await fetch(`https://api.openai.com/v1/threads/${threadId}/runs/${runId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${openAIApiKey}`,
+          'Content-Type': 'application/json',
+          'OpenAI-Beta': 'assistants=v1'
+        }
+      });
+      
+      if (!checkRunResponse.ok) {
+        console.error("Error checking run status");
+        attempts++;
+        continue;
+      }
+      
+      const checkRunData = await checkRunResponse.json();
+      runStatus = checkRunData.status;
+      console.log("Run status:", runStatus);
+      attempts++;
+    }
+    
+    if (runStatus !== "completed") {
+      console.error("Run did not complete successfully. Final status:", runStatus);
+      return new Response(JSON.stringify({ error: "Assistant did not complete the analysis" }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+    
+    // Get the messages (the response)
+    const messagesResponse = await fetch(`https://api.openai.com/v1/threads/${threadId}/messages`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${openAIApiKey}`,
+        'Content-Type': 'application/json',
+        'OpenAI-Beta': 'assistants=v1'
+      }
+    });
+    
+    if (!messagesResponse.ok) {
+      const errorData = await messagesResponse.text();
+      console.error("Error fetching messages:", errorData);
+      return new Response(JSON.stringify({ error: "Failed to retrieve assistant response" }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+    
+    const messagesData = await messagesResponse.json();
+    
+    // Get the assistant's response (the last message from the assistant)
+    const assistantMessages = messagesData.data.filter(msg => msg.role === "assistant");
+    
+    if (assistantMessages.length === 0) {
+      return new Response(JSON.stringify({ error: "No response from assistant" }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+    
+    // Get the most recent assistant message
+    const assistantMessage = assistantMessages[0];
+    
+    // Extract the content from the message
+    const roastContent = assistantMessage.content[0].text.value;
+    
+    // Structure the roast feedback
+    // This is similar to the previous implementation but uses the assistant's response
+    const fullRoast = roastContent;
+    
     // Structure the roast feedback
     const structuredRoast = {
       summary: roastContent.substring(0, 200) + "...", // Short preview
@@ -117,6 +236,7 @@ serve(async (req) => {
         "Financial Projections",
         "Team"
       ].map(section => {
+        // Try to find this section in the roast content
         const sectionPattern = new RegExp(`${section}[:\\s]+(.*?)(?=(?:${[
           "Executive Summary",
           "Market Size",
@@ -129,7 +249,7 @@ serve(async (req) => {
         const match = roastContent.match(sectionPattern);
         const feedback = match ? match[1].trim() : `No specific feedback for ${section}`;
         
-        // Extract the Pro Tip if it exists
+        // Extract the tip if it exists
         let tip = '';
         if (feedback) {
           const tipMatch = feedback.match(/Pro [Tt]ip:?\s*(.*?)(?=\n|$)/s) || 

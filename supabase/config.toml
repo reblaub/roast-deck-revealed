@@ -3,3 +3,4 @@ project_id = "rezxqmrmoauenjzfqmmw"
 
 [functions.roast-pitchdeck]
 verify_jwt = false
+

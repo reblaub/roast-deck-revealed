@@ -57,7 +57,7 @@ const RoastFeedback: React.FC<RoastFeedbackProps> = ({ fileName, roastData }) =>
         <div className="p-2 rounded-full bg-roast-orange/20">
           <Flame className="w-6 h-6 text-roast-orange" />
         </div>
-        <h2 className="text-2xl font-bold text-gradient">Roasted by Jean de La Rochebrochard</h2>
+        <h2 className="text-2xl font-bold text-gradient">Roasted by Your Custom Assistant</h2>
       </div>
       
       {fileName && (
@@ -83,7 +83,9 @@ const RoastFeedback: React.FC<RoastFeedbackProps> = ({ fileName, roastData }) =>
               <h3 className="font-semibold text-roast-blue">{item.section}</h3>
             </div>
             <p className="text-white mb-3">{item.feedback}</p>
-            <p className="text-white/70 text-sm"><span className="text-roast-purple font-medium">Jean says:</span> {item.tip}</p>
+            <p className="text-white/70 text-sm">
+              <span className="text-roast-purple font-medium">Pro Tip:</span> {item.tip}
+            </p>
           </div>
         ))}
       </div>
