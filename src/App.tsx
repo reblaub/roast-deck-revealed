@@ -11,6 +11,8 @@ import Index from "./pages/Index";
 import EgoDump from "./pages/EgoDump";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import { useEffect } from "react";
+import { createPitchdeckStorageBucket } from "./utils/createStorageBucket";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +20,11 @@ const queryClient = new QueryClient();
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const isAuthPage = location.pathname === '/auth';
+  
+  useEffect(() => {
+    // Create the storage bucket when the app initializes
+    createPitchdeckStorageBucket();
+  }, []);
   
   return (
     <div className="min-h-screen flex flex-col">

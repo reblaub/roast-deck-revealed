@@ -1,8 +1,12 @@
+
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { Upload, X, FileText } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import RoastFeedback from './RoastFeedback';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import { v4 as uuidv4 } from 'uuid';
 
 interface FileUploaderProps {
   onFileUpload?: (file: File) => void;
@@ -17,6 +21,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload, onAnalysisCom
   const [progress, setProgress] = useState(0);
   const [loadingMessage, setLoadingMessage] = useState('');
   const { toast } = useToast();
+  const { user } = useAuth();
 
   // These are the specific messages requested by the user
   const requestedMessages = [
@@ -144,7 +149,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload, onAnalysisCom
     }
   };
 
-  const handleFile = (uploadedFile: File) => {
+  const handleFile = async (uploadedFile: File) => {
     if (uploadedFile.type !== 'application/pdf') {
       toast({
         title: "Invalid file type",
@@ -169,6 +174,43 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload, onAnalysisCom
     
     if (onFileUpload) {
       onFileUpload(uploadedFile);
+    }
+
+    try {
+      // Create a storage bucket if it doesn't exist already
+      const uniqueFileName = `${uuidv4()}-${uploadedFile.name}`;
+      const userEmail = user?.email || 'anonymous';
+      
+      // Upload file to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from('pitchdecks')
+        .upload(uniqueFileName, uploadedFile);
+        
+      if (error) {
+        console.error('Error uploading file:', error);
+        toast({
+          title: "Upload failed",
+          description: error.message,
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Save record in the database
+      const { error: dbError } = await supabase
+        .from('uploaded_pitchdecks')
+        .insert({
+          id: uuidv4(),
+          user_email: userEmail,
+          file_path: uniqueFileName
+        });
+        
+      if (dbError) {
+        console.error('Error saving to database:', dbError);
+      }
+      
+    } catch (err) {
+      console.error('Error processing file:', err);
     }
   };
 
