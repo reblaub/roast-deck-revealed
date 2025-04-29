@@ -5,10 +5,10 @@ import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
 
 interface EgoDumpHeaderProps {
-  onScrollToRejections: () => void;
+  onShareStory: () => void;
 }
 
-const EgoDumpHeader: React.FC<EgoDumpHeaderProps> = ({ onScrollToRejections }) => (
+const EgoDumpHeader: React.FC<EgoDumpHeaderProps> = ({ onShareStory }) => (
   <div className="relative overflow-hidden mb-12 sm:mb-20 bg-black/70 backdrop-blur-sm rounded-xl p-4 sm:p-8">
     <div className="text-center relative z-10">
       <div className="mb-6">
@@ -39,7 +39,7 @@ const EgoDumpHeader: React.FC<EgoDumpHeaderProps> = ({ onScrollToRejections }) =
       <Button 
         variant="ghost" 
         className="animate-float text-white/60 hover:text-white hover:bg-white/10 group"
-        onClick={onScrollToRejections}
+        onClick={onShareStory}
       >
         <span className="mr-2">Read rejection stories</span>
         <ChevronDown className="h-5 w-5 transition-transform group-hover:translate-y-1" />

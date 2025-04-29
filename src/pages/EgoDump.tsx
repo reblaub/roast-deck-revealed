@@ -6,6 +6,9 @@ import EgoDumpRejectionList from '@/components/EgoDumpRejectionList';
 import EgoDumpQuote from '@/components/EgoDumpQuote';
 import { v4 as uuidv4 } from 'uuid';
 import { useToast } from '@/components/ui/use-toast';
+import { Button } from '@/components/ui/button';
+import { Mail, RotateCcw } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 type Rejection = {
   id: number;
@@ -28,20 +31,21 @@ const EgoDump = () => {
     {
       id: 2,
       author: 'Jane',
-      story: 'The VC interrupted my pitch after 30 seconds to ask if I'd considered "just getting a real job instead."',
+      story: "The VC interrupted my pitch after 30 seconds to ask if I'd considered \"just getting a real job instead.\"",
       likes: 42,
       liked: false
     },
     {
       id: 3,
       author: 'Frustrated in Fintech',
-      story: 'Was told my finance app "wouldn't work because women don't understand money." I'm a female CFO with 15 years of experience.',
+      story: "Was told my finance app \"wouldn't work because women don't understand money.\" I'm a female CFO with 15 years of experience.",
       likes: 56,
       liked: true
     }
   ]);
   
   const { toast } = useToast();
+  const navigate = useNavigate();
   const rejectionListRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -92,6 +96,17 @@ const EgoDump = () => {
     }
   };
 
+  const handleSendToEmail = () => {
+    toast({
+      title: "Email feature coming soon",
+      description: "We'll send your roast to your email address shortly.",
+    });
+  };
+
+  const handleReset = () => {
+    navigate('/');
+  };
+
   return (
     <div className="min-h-screen bg-black text-white">
       <div className="container mx-auto px-4 py-12 sm:py-16">
@@ -116,6 +131,25 @@ const EgoDump = () => {
           rejectionListRef={rejectionListRef}
           scrollAreaRef={scrollAreaRef}
         />
+        
+        {/* New Email and Reset Buttons */}
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8 mb-12">
+          <Button 
+            onClick={handleSendToEmail}
+            className="bg-gradient-to-r from-roast-purple to-roast-blue hover:opacity-90 transition-opacity w-full sm:w-auto"
+          >
+            <Mail className="mr-2 h-4 w-4" />
+            Send roast to email
+          </Button>
+          <Button 
+            variant="outline"
+            onClick={handleReset}
+            className="border-white/10 hover:bg-white/10 text-white/70 hover:text-white w-full sm:w-auto"
+          >
+            <RotateCcw className="mr-2 h-4 w-4" />
+            Back to homepage
+          </Button>
+        </div>
       </div>
     </div>
   );
