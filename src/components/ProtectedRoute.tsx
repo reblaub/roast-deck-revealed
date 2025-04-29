@@ -6,11 +6,13 @@ import { useAuth } from '@/contexts/AuthContext';
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requireAuth?: boolean;
+  [key: string]: any; // Allow any additional props
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
   children, 
-  requireAuth = true 
+  requireAuth = true,
+  ...restProps // Capture all other props
 }) => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
@@ -32,8 +34,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     );
   }
 
-  // If requireAuth is true and no user, the useEffect will handle redirect
-  // If requireAuth is false or we have a user, render the children
+  // Pass all remaining props to the children
+  // This ensures any props required by child components are passed along
+  if (React.isValidElement(children)) {
+    return React.cloneElement(children, restProps);
+  }
+
   return <>{children}</>;
 };
 

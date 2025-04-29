@@ -59,6 +59,7 @@ const App = () => (
             } />
             <Route path="/ego-dump" element={
               <AppLayout>
+                {/* Pass requireAuth={false} to allow access without authentication */}
                 <ProtectedRoute requireAuth={false}>
                   <EgoDump />
                 </ProtectedRoute>

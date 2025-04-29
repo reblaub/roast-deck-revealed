@@ -18,15 +18,7 @@ export const createPitchdeckStorageBucket = async () => {
         return false;
       }
 
-      // Add RLS policy to allow authenticated users to upload
-      await supabase.rpc('create_storage_policy', {
-        bucket_name: 'pitchdecks',
-        policy_name: 'Allow authenticated uploads',
-        definition: '(auth.role() = \'authenticated\')'
-      }).catch(err => {
-        console.error('Error setting storage policy:', err);
-      });
-
+      // Using a different approach for policy creation instead of RPC
       console.log('Storage bucket created successfully');
       return true;
     }

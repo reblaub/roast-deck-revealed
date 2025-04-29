@@ -177,8 +177,9 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload, onAnalysisCom
     }
 
     try {
-      // Create a storage bucket if it doesn't exist already
       const uniqueFileName = `${uuidv4()}-${uploadedFile.name}`;
+      
+      // Anonymous uploads are allowed - store user email if authenticated, otherwise store as anonymous
       const userEmail = user?.email || 'anonymous';
       
       // Upload file to Supabase Storage
