@@ -8,6 +8,7 @@ import SignupForm from '@/components/SignupForm';
 import { Button } from '@/components/ui/button';
 import { MessageSquareHeart } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import UserMenu from '@/components/UserMenu';
 
 const Index = () => {
   const [analysisComplete, setAnalysisComplete] = useState(false);
@@ -21,13 +22,17 @@ const Index = () => {
     <div className="min-h-screen bg-black text-white flex flex-col overflow-hidden relative">
       <div className="w-full max-w-7xl mx-auto px-6 py-8">
         {/* Header with navigation */}
-        <div className="flex justify-end mb-4">
-          <Link to="/ego-dump">
-            <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/10">
-              <MessageSquareHeart className="mr-2 h-5 w-5" />
-              <span>The Ego Dump</span>
-            </Button>
-          </Link>
+        <div className="flex justify-between mb-4">
+          <div></div> {/* Empty div for flex spacing */}
+          <div className="flex items-center gap-2">
+            <Link to="/ego-dump">
+              <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/10">
+                <MessageSquareHeart className="mr-2 h-5 w-5" />
+                <span>The Ego Dump</span>
+              </Button>
+            </Link>
+            <UserMenu />
+          </div>
         </div>
         
         {/* Hero Section */}

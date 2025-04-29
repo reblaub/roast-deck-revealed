@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import { ArrowRight } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 const SignupForm = () => {
   const [email, setEmail] = useState('');
@@ -23,15 +24,28 @@ const SignupForm = () => {
 
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Save email to Supabase
+      const { error } = await supabase
+        .from('signups')
+        .insert([{ email }]);
+      
+      if (error) throw error;
+      
       setLoading(false);
       setEmail('');
       toast({
         title: "Thank you for signing up!",
         description: "We'll send you feedback from top investors soon.",
       });
-    }, 1500);
+    } catch (error: any) {
+      setLoading(false);
+      toast({
+        title: "Something went wrong",
+        description: error.message || "Failed to sign up. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
