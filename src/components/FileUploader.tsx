@@ -20,6 +20,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload, onAnalysisCom
   const [isAnalysisComplete, setIsAnalysisComplete] = useState(false);
   const [progress, setProgress] = useState(0);
   const [loadingMessage, setLoadingMessage] = useState('');
+  const [roastData, setRoastData] = useState<any>(null);
   const { toast } = useToast();
   const { user } = useAuth();
 
@@ -85,17 +86,6 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload, onAnalysisCom
         
         if (currentProgress >= 100) {
           clearInterval(progressInterval);
-          setTimeout(() => {
-            setIsLoading(false);
-            setIsAnalysisComplete(true);
-            if (onAnalysisComplete) {
-              onAnalysisComplete();
-            }
-            toast({
-              title: "Analysis complete",
-              description: "Your pitch deck has been thoroughly roasted.",
-            });
-          }, 1000);
         }
       }, 200);
 
@@ -116,7 +106,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload, onAnalysisCom
         clearInterval(messageInterval);
       };
     }
-  }, [isLoading, toast, onAnalysisComplete]);
+  }, [isLoading]);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -149,6 +139,29 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload, onAnalysisCom
     }
   };
 
+  const callAIRoast = async (pitchdeckId: string) => {
+    try {
+      const response = await fetch('https://rezxqmrmoauenjzfqmmw.supabase.co/functions/v1/roast-pitchdeck', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY || ''}`,
+        },
+        body: JSON.stringify({ pitchdeckId }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API call failed with status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error calling AI roast:', error);
+      throw error;
+    }
+  };
+
   const handleFile = async (uploadedFile: File) => {
     if (uploadedFile.type !== 'application/pdf') {
       toast({
@@ -177,7 +190,8 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload, onAnalysisCom
     }
 
     try {
-      const uniqueFileName = `${uuidv4()}-${uploadedFile.name}`;
+      const fileId = uuidv4();
+      const uniqueFileName = `${fileId}-${uploadedFile.name}`;
       
       // Anonymous uploads are allowed - store user email if authenticated, otherwise store as anonymous
       const userEmail = user?.email || 'anonymous';
@@ -194,24 +208,69 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload, onAnalysisCom
           description: error.message,
           variant: "destructive"
         });
+        setIsLoading(false);
         return;
       }
 
       // Save record in the database
-      const { error: dbError } = await supabase
+      const { data: dbData, error: dbError } = await supabase
         .from('uploaded_pitchdecks')
         .insert({
-          id: uuidv4(),
+          id: fileId,
           user_email: userEmail,
           file_path: uniqueFileName
-        });
+        })
+        .select();
         
       if (dbError) {
         console.error('Error saving to database:', dbError);
+        setIsLoading(false);
+        return;
+      }
+
+      // Now trigger the AI roast
+      try {
+        const roastResult = await callAIRoast(fileId);
+        setRoastData(roastResult.roast);
+        
+        // Complete the progress simulation
+        setTimeout(() => {
+          setIsLoading(false);
+          setIsAnalysisComplete(true);
+          if (onAnalysisComplete) {
+            onAnalysisComplete();
+          }
+          toast({
+            title: "Analysis complete",
+            description: "Your pitch deck has been thoroughly roasted.",
+          });
+        }, 1000);
+        
+      } catch (roastError) {
+        console.error('Error generating AI roast:', roastError);
+        // Still complete the progress but show an error
+        setTimeout(() => {
+          setIsLoading(false);
+          setIsAnalysisComplete(true);
+          if (onAnalysisComplete) {
+            onAnalysisComplete();
+          }
+          toast({
+            title: "Roast partially complete",
+            description: "We had some issues with the AI roast, but we've analyzed what we could.",
+            variant: "destructive"
+          });
+        }, 1000);
       }
       
     } catch (err) {
       console.error('Error processing file:', err);
+      setIsLoading(false);
+      toast({
+        title: "Processing failed",
+        description: "There was an error processing your file.",
+        variant: "destructive"
+      });
     }
   };
 
@@ -221,6 +280,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload, onAnalysisCom
     setIsAnalysisComplete(false);
     setProgress(0);
     setLoadingMessage('');
+    setRoastData(null);
   };
 
   const resetAnalysis = () => {
@@ -229,12 +289,13 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload, onAnalysisCom
     setIsAnalysisComplete(false);
     setProgress(0);
     setLoadingMessage('');
+    setRoastData(null);
   };
 
   if (isAnalysisComplete && file) {
     return (
       <div className="w-full max-w-xl mx-auto">
-        <RoastFeedback fileName={file.name} />
+        <RoastFeedback fileName={file.name} roastData={roastData} />
         <div className="text-center mt-6">
           <button
             onClick={resetAnalysis}

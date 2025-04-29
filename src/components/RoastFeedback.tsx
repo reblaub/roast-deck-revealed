@@ -5,10 +5,20 @@ import AnalysisPieChart from './AnalysisPieChart';
 
 interface RoastFeedbackProps {
   fileName?: string;
+  roastData?: {
+    summary?: string;
+    fullRoast?: string;
+    sections?: Array<{
+      section: string;
+      feedback: string;
+      tip: string;
+    }>;
+  };
 }
 
-const RoastFeedback: React.FC<RoastFeedbackProps> = ({ fileName }) => {
-  const roastFeedback = [
+const RoastFeedback: React.FC<RoastFeedbackProps> = ({ fileName, roastData }) => {
+  // Use AI-generated roast data if available, otherwise use default feedback
+  const roastFeedback = roastData?.sections || [
     {
       section: "Executive Summary",
       feedback: "Your executive summary shows promise but lacks the punch that makes investors sit up. It's like a movie trailer that forgot to show the explosions.",
@@ -53,6 +63,12 @@ const RoastFeedback: React.FC<RoastFeedbackProps> = ({ fileName }) => {
       {fileName && (
         <div className="mb-6 text-white/60 text-sm">
           File analyzed: <span className="text-white font-medium">{fileName}</span>
+        </div>
+      )}
+
+      {roastData?.fullRoast && (
+        <div className="mb-6 p-4 border border-white/10 rounded-lg bg-white/5 backdrop-blur-sm">
+          <p className="text-white/90 italic">{roastData.fullRoast}</p>
         </div>
       )}
 

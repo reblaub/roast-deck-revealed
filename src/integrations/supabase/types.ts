@@ -9,6 +9,35 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      ai_roasts: {
+        Row: {
+          created_at: string
+          id: string
+          pitchdeck_id: string
+          roast_content: Json
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          pitchdeck_id: string
+          roast_content: Json
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          pitchdeck_id?: string
+          roast_content?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_roasts_pitchdeck_id_fkey"
+            columns: ["pitchdeck_id"]
+            isOneToOne: false
+            referencedRelation: "uploaded_pitchdecks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       feedbacks: {
         Row: {
           created_at: string
