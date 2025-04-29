@@ -54,41 +54,43 @@ const InvestorCarousel = () => {
   const isMobile = useIsMobile();
   
   return (
-    <Carousel
-      opts={{
-        align: "start",
-        loop: true,
-      }}
-      className="w-full max-w-5xl mx-auto px-6"
-    >
-      <CarouselContent>
-        {investors.map((investor, index) => (
-          <CarouselItem key={investor.name} className="basis-full md:basis-1/2 lg:basis-1/3">
-            <div className="flex flex-col items-center p-4">
-              <div className="relative mb-3">
-                <Avatar className="w-20 h-20 border-2 border-white/20">
-                  <AvatarImage src={investor.image} alt={investor.name} />
-                  <AvatarFallback className="bg-gradient-to-r from-roast-purple via-roast-blue to-roast-orange text-white">
-                    {investor.initials}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="absolute inset-0 blur-lg opacity-40 bg-gradient-to-r from-roast-purple via-roast-blue to-roast-orange rounded-full animate-pulse-slow" />
+    <div className="w-full max-w-5xl mx-auto">
+      <Carousel
+        opts={{
+          align: "start",
+          loop: true,
+        }}
+        className="w-full px-6"
+      >
+        <CarouselContent>
+          {investors.map((investor, index) => (
+            <CarouselItem key={investor.name} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 p-1">
+              <div className="flex flex-col items-center p-4 h-full bg-black/20 rounded-lg backdrop-blur-sm border border-white/10">
+                <div className="relative mb-3">
+                  <Avatar className="w-20 h-20 border-2 border-white/20">
+                    <AvatarImage src={investor.image} alt={investor.name} />
+                    <AvatarFallback className="bg-gradient-to-r from-roast-purple via-roast-blue to-roast-orange text-white">
+                      {investor.initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="absolute inset-0 blur-lg opacity-40 bg-gradient-to-r from-roast-purple via-roast-blue to-roast-orange rounded-full animate-pulse-slow" />
+                </div>
+                <h3 className="font-semibold mb-0.5 text-center">{investor.name}</h3>
+                {investor.title && (
+                  <p className="text-sm text-white/60 text-center">{investor.title}</p>
+                )}
               </div>
-              <h3 className="font-semibold mb-0.5">{investor.name}</h3>
-              {investor.title && (
-                <p className="text-sm text-white/60">{investor.title}</p>
-              )}
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      {!isMobile && (
-        <>
-          <CarouselPrevious className="left-1" />
-          <CarouselNext className="right-1" />
-        </>
-      )}
-    </Carousel>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        {!isMobile && (
+          <>
+            <CarouselPrevious className="left-1" />
+            <CarouselNext className="right-1" />
+          </>
+        )}
+      </Carousel>
+    </div>
   );
 };
 
