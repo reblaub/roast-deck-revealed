@@ -19,8 +19,8 @@ const investors: Investor[] = [
     delay: 0,
   },
   {
-    name: 'Jean de la Rochebrochard',
-    image: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625',
+    name: 'Jean de La Rochebrochard',
+    image: '/lovable-uploads/c7ee545b-54a6-48b1-8e56-7b587f1c1c3b.png',
     initials: 'JR',
     delay: 1,
   },
