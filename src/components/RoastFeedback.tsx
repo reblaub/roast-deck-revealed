@@ -1,6 +1,6 @@
+
 import React from 'react';
 import { Flame, FileCheck } from 'lucide-react';
-import EmailCapture from './EmailCapture';
 import AnalysisPieChart from './AnalysisPieChart';
 
 interface RoastFeedbackProps {
@@ -73,8 +73,6 @@ const RoastFeedback: React.FC<RoastFeedbackProps> = ({ fileName }) => {
       </div>
 
       <AnalysisPieChart fileName={fileName} className="mb-8" />
-
-      <EmailCapture />
     </div>
   );
 };
