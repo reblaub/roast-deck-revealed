@@ -1,143 +1,94 @@
-import React from 'react';
-import { Users } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-interface Investor {
+import React from 'react';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { useIsMobile } from '@/hooks/use-mobile';
+
+interface InvestorProfile {
   name: string;
-  title: string;
-  company: string;
-  imageUrl?: string;
+  image: string;
+  initials: string;
+  title?: string;
 }
 
-const InvestorCarousel: React.FC = () => {
-  // Sample investor data with actual profile images
-  const investors: Investor[] = [
-    { 
-      name: "Marc Andreessen", 
-      title: "Co-founder", 
-      company: "Andreessen Horowitz",
-      imageUrl: "https://pbs.twimg.com/profile_images/1622307688302632962/n4p8g4zF_400x400.jpg"
-    },
-    { 
-      name: "Paul Graham", 
-      title: "Co-founder", 
-      company: "Y Combinator",
-      imageUrl: "https://pbs.twimg.com/profile_images/1824002576/pg-railsconf_400x400.jpg"
-    },
-    { 
-      name: "Alexis Ohanian", 
-      title: "Co-founder", 
-      company: "Reddit & Seven Seven Six",
-      imageUrl: "https://pbs.twimg.com/profile_images/1754864807753474048/7QQvGnGU_400x400.jpg"
-    },
-    { 
-      name: "Garry Tan", 
-      title: "President & CEO", 
-      company: "Y Combinator",
-      imageUrl: "https://pbs.twimg.com/profile_images/1710301089875816448/WJZrrY-e_400x400.jpg"
-    },
-    { 
-      name: "Sarah Tavel", 
-      title: "General Partner", 
-      company: "Benchmark",
-      imageUrl: "https://pbs.twimg.com/profile_images/1485630043748503560/p40k5Gmi_400x400.jpg"
-    },
-    { 
-      name: "Fred Wilson", 
-      title: "Co-founder", 
-      company: "Union Square Ventures",
-      imageUrl: "https://pbs.twimg.com/profile_images/1129000778137300992/Zkek0UD7_400x400.png"
-    },
-    { 
-      name: "Bill Gurley", 
-      title: "General Partner", 
-      company: "Benchmark",
-      imageUrl: "https://pbs.twimg.com/profile_images/1756071581577302016/U2GvIuIl_400x400.jpg"
-    },
-    { 
-      name: "Mary Meeker", 
-      title: "Founder", 
-      company: "Bond Capital",
-      imageUrl: "https://bond.tech/wp-content/uploads/2022/04/Mary_Meeker-4.jpg"
-    },
-    { 
-      name: "Naval Ravikant", 
-      title: "Co-founder", 
-      company: "AngelList",
-      imageUrl: "https://pbs.twimg.com/profile_images/1720821605398499328/TzK9tXpE_400x400.jpg"
-    },
-    { 
-      name: "Chamath Palihapitiya", 
-      title: "CEO", 
-      company: "Social Capital",
-      imageUrl: "https://pbs.twimg.com/profile_images/1455606877418692611/FXzZ9ytv_400x400.jpg"
-    },
-    { 
-      name: "Xavier Niel", 
-      title: "Founder", 
-      company: "Free, Station F",
-      imageUrl: "https://pbs.twimg.com/profile_images/1229354916218048512/OComboem_400x400.jpg"
-    },
-    { 
-      name: "Jean de la Rochebrochard", 
-      title: "Partner", 
-      company: "Kima Ventures",
-      imageUrl: "https://pbs.twimg.com/profile_images/1349023935996153857/CMKoyCXI_400x400.jpg"
-    },
-    { 
-      name: "Guillaume Moubeche", 
-      title: "Co-founder", 
-      company: "Lemlist",
-      imageUrl: "https://pbs.twimg.com/profile_images/1473670425/g_400x400.jpg"
-    },
-  ];
+const investors: InvestorProfile[] = [
+  {
+    name: 'Jean de La Rochebrochard',
+    image: '/lovable-uploads/c7ee545b-54a6-48b1-8e56-7b587f1c1c3b.png',
+    initials: 'JR',
+    title: 'Kima Ventures',
+  },
+  {
+    name: 'Roxane Varza',
+    image: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9',
+    initials: 'RV',
+    title: 'Station F',
+  },
+  {
+    name: 'Guillaume Moubeche',
+    image: 'https://images.unsplash.com/photo-1494891848038-7bd202a2afeb',
+    initials: 'GM',
+    title: 'lemlist',
+  },
+  {
+    name: 'Mathilde Collin',
+    image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2',
+    initials: 'MC',
+    title: 'Front',
+  },
+  {
+    name: 'Sébastien Borget',
+    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d',
+    initials: 'SB',
+    title: 'The Sandbox',
+  },
+];
 
+const InvestorCarousel = () => {
+  const isMobile = useIsMobile();
+  
   return (
-    <div className="relative overflow-hidden">
-      <div className="flex animate-carousel gap-4 px-4">
-        {/* First set of investors */}
+    <Carousel
+      opts={{
+        align: "start",
+        loop: true,
+      }}
+      className="w-full max-w-5xl mx-auto px-6"
+    >
+      <CarouselContent>
         {investors.map((investor, index) => (
-          <div 
-            key={`investor-1-${index}`}
-            className="flex-shrink-0 w-64 p-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl"
-          >
-            <div className="flex items-center gap-3 mb-3">
-              <Avatar className="border border-white/10">
-                <AvatarImage src={investor.imageUrl} alt={investor.name} />
-                <AvatarFallback className="bg-roast-purple/20 text-roast-purple">
-                  {investor.name.split(' ').map(n => n[0]).join('')}
-                </AvatarFallback>
-              </Avatar>
-              <div className="text-left">
-                <h3 className="font-semibold text-white">{investor.name}</h3>
-                <p className="text-xs text-white/60">{investor.title}, {investor.company}</p>
+          <CarouselItem key={investor.name} className="basis-full md:basis-1/2 lg:basis-1/3">
+            <div className="flex flex-col items-center p-4">
+              <div className="relative mb-3">
+                <Avatar className="w-20 h-20 border-2 border-white/20">
+                  <AvatarImage src={investor.image} alt={investor.name} />
+                  <AvatarFallback className="bg-gradient-to-r from-roast-purple via-roast-blue to-roast-orange text-white">
+                    {investor.initials}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="absolute inset-0 blur-lg opacity-40 bg-gradient-to-r from-roast-purple via-roast-blue to-roast-orange rounded-full animate-pulse-slow" />
               </div>
+              <h3 className="font-semibold mb-0.5">{investor.name}</h3>
+              {investor.title && (
+                <p className="text-sm text-white/60">{investor.title}</p>
+              )}
             </div>
-          </div>
+          </CarouselItem>
         ))}
-        
-        {/* Duplicate set for infinite scroll effect */}
-        {investors.map((investor, index) => (
-          <div 
-            key={`investor-2-${index}`}
-            className="flex-shrink-0 w-64 p-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl"
-          >
-            <div className="flex items-center gap-3 mb-3">
-              <Avatar className="border border-white/10">
-                <AvatarImage src={investor.imageUrl} alt={investor.name} />
-                <AvatarFallback className="bg-roast-purple/20 text-roast-purple">
-                  {investor.name.split(' ').map(n => n[0]).join('')}
-                </AvatarFallback>
-              </Avatar>
-              <div className="text-left">
-                <h3 className="font-semibold text-white">{investor.name}</h3>
-                <p className="text-xs text-white/60">{investor.title}, {investor.company}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+      </CarouselContent>
+      {!isMobile && (
+        <>
+          <CarouselPrevious className="left-1" />
+          <CarouselNext className="right-1" />
+        </>
+      )}
+    </Carousel>
   );
 };
 
