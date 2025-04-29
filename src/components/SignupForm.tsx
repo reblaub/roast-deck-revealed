@@ -26,10 +26,14 @@ const SignupForm = () => {
     
     try {
       // Check if email already exists
-      const { data: existingEmails } = await supabase
+      const { data: existingEmails, error: queryError } = await supabase
         .from('signups')
         .select('email')
         .eq('email', email);
+
+      if (queryError) {
+        throw queryError;
+      }
 
       if (existingEmails && existingEmails.length > 0) {
         setLoading(false);
