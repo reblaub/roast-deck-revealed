@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { ArrowRight } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -25,6 +25,21 @@ const SignupForm = () => {
     setLoading(true);
     
     try {
+      // Check if email already exists
+      const { data: existingEmails } = await supabase
+        .from('signups')
+        .select('email')
+        .eq('email', email);
+
+      if (existingEmails && existingEmails.length > 0) {
+        setLoading(false);
+        toast({
+          title: "Already signed up!",
+          description: "This email is already registered with us.",
+        });
+        return;
+      }
+      
       // Save email to Supabase
       const { error } = await supabase
         .from('signups')
@@ -40,6 +55,8 @@ const SignupForm = () => {
       });
     } catch (error: any) {
       setLoading(false);
+      console.error("Signup error:", error);
+      
       toast({
         title: "Something went wrong",
         description: error.message || "Failed to sign up. Please try again.",

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '@/components/Logo';
@@ -66,12 +65,6 @@ const Index = () => {
           
           {/* Secondary CTA - Email Signup for premium feedback */}
           <div className="w-full max-w-xl mx-auto mt-8 mb-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 shadow-lg">
-            <h2 className="text-xl md:text-2xl font-bold text-gradient mb-4 text-center">
-              Want slide-by-slide expert feedback?
-            </h2>
-            <p className="text-white/70 mb-6 text-center">
-              Get personalized insights from top investors directly to your inbox
-            </p>
             <SignupForm />
           </div>
           

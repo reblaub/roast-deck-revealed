@@ -37,13 +37,6 @@ const EmailCapture: React.FC = () => {
 
   return (
     <div className="w-full max-w-3xl mx-auto text-center py-12">
-      <h2 className="text-2xl md:text-3xl font-bold text-gradient mb-3">
-        For personalized feedback from top investors
-      </h2>
-      <p className="text-white/60 mb-8">
-        Drop your email below and we'll contact you
-      </p>
-      
       <form onSubmit={handleSubmit} className="max-w-md mx-auto flex gap-2">
         <Input
           type="email"
