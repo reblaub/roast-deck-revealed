@@ -1,13 +1,12 @@
 
 import React, { useState, useRef } from 'react';
-import { useToast } from '@/components/ui/use-toast';
-import { Button } from '@/components/ui/button';
 import EgoDumpHeader from '@/components/EgoDumpHeader';
 import EgoDumpStoryForm from '@/components/EgoDumpStoryForm';
 import EgoDumpRejectionList from '@/components/EgoDumpRejectionList';
-import { useAuth } from '@/contexts/AuthContext';
+import EgoDumpQuote from '@/components/EgoDumpQuote';
+import { v4 as uuidv4 } from 'uuid';
+import { useToast } from '@/components/ui/use-toast';
 
-// Define a type for rejection stories
 type Rejection = {
   id: number;
   author: string;
@@ -17,120 +16,106 @@ type Rejection = {
 };
 
 const EgoDump = () => {
-  const { toast } = useToast();
-  const { user } = useAuth();
-  const [formVisible, setFormVisible] = useState(false);
-  const rejectionsRef = useRef<HTMLDivElement>(null);
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
-  
-  // Sample rejection stories
+  const [showForm, setShowForm] = useState(false);
   const [rejections, setRejections] = useState<Rejection[]>([
     {
       id: 1,
-      author: "Anonymous Founder",
-      story: "Got an email from an investor that said 'Your idea is interesting but we don't see a market for it.' Three months later they funded our competitor.",
-      likes: 24,
+      author: 'Anonymous Founder',
+      story: 'They said my idea was "too early" in 2018. Now there are 5 unicorns in the space.',
+      likes: 28,
       liked: false
     },
     {
       id: 2,
-      author: "Tech Entrepreneur",
-      story: "Pitch meeting was going great until the VC asked how old I was. When I said 42, he said 'We typically invest in founders under 30.' I'd already built and sold two companies!",
-      likes: 56,
-      liked: true
+      author: 'Jane',
+      story: 'The VC interrupted my pitch after 30 seconds to ask if I'd considered "just getting a real job instead."',
+      likes: 42,
+      liked: false
     },
     {
       id: 3,
-      author: "SaaS Founder",
-      story: "Investor told me my valuation was too high. When I asked what they thought was reasonable, they suggested a number 75% lower than market rate. I walked out.",
-      likes: 18,
-      liked: false
+      author: 'Frustrated in Fintech',
+      story: 'Was told my finance app "wouldn't work because women don't understand money." I'm a female CFO with 15 years of experience.',
+      likes: 56,
+      liked: true
     }
   ]);
   
-  const handleNewSubmission = () => {
-    toast({
-      title: "Submission received!",
-      description: "Your rejection story has been added to the dump.",
-    });
-    setFormVisible(false);
-    // Optionally, you could add logic here to refresh the rejection stories
+  const { toast } = useToast();
+  const rejectionListRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  const handleShareStory = () => {
+    setShowForm(true);
   };
-  
-  const scrollToRejections = () => {
-    rejectionsRef.current?.scrollIntoView({ behavior: 'smooth' });
+
+  const handleCancelStory = () => {
+    setShowForm(false);
+  };
+
+  const handleSubmitStory = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Logic to submit story would go here
+    setShowForm(false);
+    
+    toast({
+      title: "Story shared!",
+      description: "Your rejection is now immortalized on the wall of shame.",
+    });
   };
 
   const handleLike = (id: number) => {
     setRejections(prevRejections => 
       prevRejections.map(rejection => 
-        rejection.id === id ? 
-          { ...rejection, likes: rejection.liked ? rejection.likes - 1 : rejection.likes + 1, liked: !rejection.liked } : 
-          rejection
+        rejection.id === id 
+          ? { 
+              ...rejection, 
+              likes: rejection.liked ? rejection.likes - 1 : rejection.likes + 1,
+              liked: !rejection.liked 
+            } 
+          : rejection
       )
     );
   };
 
   const handleShare = (story: string) => {
-    if (navigator.share) {
-      navigator.share({
-        title: 'EgoDump Rejection Story',
-        text: story
-      }).catch(err => console.error('Error sharing:', err));
-    } else {
-      navigator.clipboard.writeText(story);
-      toast({
-        title: "Copied to clipboard",
-        description: "Rejection story copied to clipboard."
-      });
-    }
+    navigator.clipboard.writeText(story);
+    toast({
+      title: "Copied to clipboard",
+      description: "Story copied! Share the pain with others.",
+    });
   };
-
-  const scrollToNext = () => {
+  
+  const handleScrollToNext = () => {
     if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTop += 200;
+      scrollAreaRef.current.scrollTop += 200; // Scroll down by 200px
     }
   };
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Hero Section */}
-      <div className="pt-16 pb-20 px-6 max-w-6xl mx-auto">
-        <EgoDumpHeader onScrollToRejections={scrollToRejections} />
+      <div className="container mx-auto px-4 py-12 sm:py-16">
+        <EgoDumpHeader onShareStory={handleShareStory} />
         
-        {/* Story Form Section */}
-        <div className="mt-16">
-          {formVisible ? (
-            <EgoDumpStoryForm 
-              onSubmit={handleNewSubmission}
-              onCancel={() => setFormVisible(false)}
-            />
-          ) : (
-            <div className="text-center">
-              <Button 
-                onClick={() => setFormVisible(true)}
-                className="bg-gradient-to-r from-roast-purple to-roast-blue hover:opacity-90 text-white px-8 py-6 text-lg rounded-xl"
-              >
-                Share Your Rejection Story
-              </Button>
-            </div>
-          )}
+        <div className="my-12 sm:my-16">
+          <EgoDumpQuote />
         </div>
         
-        {/* Rejections List Section */}
-        <div ref={rejectionsRef} className="mt-24">
-          <h2 className="text-3xl font-bold text-gradient mb-8 text-center">
-            Rejection Wall of "Fame"
-          </h2>
-          <EgoDumpRejectionList 
-            rejections={rejections}
-            onLike={handleLike}
-            onShare={handleShare}
-            onScrollToNext={scrollToNext}
-            rejectionListRef={rejectionsRef}
-            scrollAreaRef={scrollAreaRef}
+        {showForm && (
+          <EgoDumpStoryForm 
+            onSubmit={handleSubmitStory} 
+            onCancel={handleCancelStory}
           />
-        </div>
+        )}
+        
+        <EgoDumpRejectionList 
+          rejections={rejections}
+          onLike={handleLike}
+          onShare={handleShare}
+          onScrollToNext={handleScrollToNext}
+          rejectionListRef={rejectionListRef}
+          scrollAreaRef={scrollAreaRef}
+        />
       </div>
     </div>
   );
