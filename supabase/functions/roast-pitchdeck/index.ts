@@ -51,25 +51,27 @@ serve(async (req) => {
       });
     }
 
-    // Create a prompt for the AI assistant
+    // Create a Jean de la Rochebrochard-inspired prompt
     const prompt = `
-    You are a brutally honest VC (venture capitalist) reviewing a startup pitch deck. 
-    Your job is to critically assess and humorously roast the pitch deck of the startup.
+    You are Jean de La Rochebrochard, the CEO of Kima Ventures, known for your direct, no-nonsense approach to pitch deck reviews.
     
-    Be specific, witty, blunt but also constructive. Focus on these key areas:
-    - Executive Summary: Is it clear what the business does? Is the value proposition compelling?
-    - Market Size: Are TAM/SAM/SOM calculations reasonable or outlandishly optimistic?
-    - Competitive Analysis: Have they missed obvious competitors or overestimated their advantages?
-    - Go-to-Market Strategy: Is the strategy realistic or just wishful thinking?
-    - Financial Projections: Are the numbers believable or pure fantasy?
-    - Team: Do they have relevant experience or are they overconfident beginners?
+    As Jean, you're blunt, sometimes sarcastic, and you've seen thousands of pitch decks, so you can immediately spot the BS. You focus on substance over style and have no patience for inflated metrics, vague value propositions, or unrealistic business plans.
+    
+    You're reviewing a pitch deck for "${pitchdeck.file_path?.split('-').slice(1).join('-') || 'Unknown Startup'}" and need to provide brutally honest feedback in your distinctive voice.
+    
+    Address these key areas with your characteristic directness:
+    - Executive Summary: Cut through the fluff and tell them if their core proposition makes any sense.
+    - Market Size: Challenge any inflated TAM claims - you hate the "if we get 1% of China" approach.
+    - Competitive Analysis: Point out competitors they've conveniently ignored or advantages they've overstated.
+    - Go-to-Market Strategy: Evaluate if they have a realistic plan or just wishful thinking.
+    - Financial Projections: Call out hockey stick projections without solid backing.
+    - Team: Assess whether they have relevant experience or just fancy titles.
     
     For each area, provide:
-    1. A brutal but humorous critique
-    2. A helpful tip on how to improve
+    1. A brutally honest critique in Jean's voice - direct, sometimes cutting, but always substantive
+    2. A straightforward tip on how to improve - you're tough, but you want founders to succeed if they have something real
     
-    Your tone should be scathingly funny but with actual substance - like a comedy roast that teaches.
-    Remember, you're roasting a pitch deck for a startup called "${pitchdeck.file_path?.split('-').slice(1).join('-') || 'Unknown Startup'}".
+    Your tone is skeptical, direct, and occasionally witty, but with practical advice. You sound like a busy VC who has no time to waste on pleasantries but wants to see good companies succeed.
     `;
 
     // Call OpenAI API
@@ -80,13 +82,13 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini', // Using a cost-effective model
+        model: 'gpt-4o',  // Using a more powerful model for better mimicry
         messages: [
           { role: 'system', content: prompt },
-          { role: 'user', content: 'Please roast this pitch deck thoroughly and humorously.' }
+          { role: 'user', content: 'Please review this pitch deck as Jean de La Rochebrochard of Kima Ventures.' }
         ],
-        temperature: 0.8, // Add some creativity
-        max_tokens: 800, // Limit response length
+        temperature: 0.9, // Higher temperature for more character-specific output
+        max_tokens: 1000, // Allow for longer, more detailed feedback
       }),
     });
 
@@ -111,7 +113,7 @@ serve(async (req) => {
         "Executive Summary",
         "Market Size",
         "Competitive Analysis",
-        "Go-to-Market Strategy",
+        "Go-to-Market Strategy", 
         "Financial Projections",
         "Team"
       ].map(section => {
@@ -125,10 +127,20 @@ serve(async (req) => {
         ].join('|')})|$)`, 'si');
         
         const match = roastContent.match(sectionPattern);
+        const feedback = match ? match[1].trim() : `No specific feedback for ${section}`;
+        
+        // Extract the Pro Tip if it exists
+        let tip = '';
+        if (feedback) {
+          const tipMatch = feedback.match(/Pro [Tt]ip:?\s*(.*?)(?=\n|$)/s) || 
+                          feedback.match(/Tip:?\s*(.*?)(?=\n|$)/s);
+          tip = tipMatch ? tipMatch[1].trim() : `Improve your ${section.toLowerCase()} with more concrete data and clear explanations.`;
+        }
+        
         return {
           section,
-          feedback: match ? match[1].trim() : `No specific feedback for ${section}`,
-          tip: `Tip for improving ${section}...` // Default tip
+          feedback: feedback.replace(/Pro [Tt]ip:?\s*(.*?)(?=\n|$)/g, '').trim(),
+          tip
         };
       })
     };

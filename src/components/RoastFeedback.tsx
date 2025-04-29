@@ -21,33 +21,33 @@ const RoastFeedback: React.FC<RoastFeedbackProps> = ({ fileName, roastData }) =>
   const roastFeedback = roastData?.sections || [
     {
       section: "Executive Summary",
-      feedback: "Your executive summary shows promise but lacks the punch that makes investors sit up. It's like a movie trailer that forgot to show the explosions.",
-      tip: "Lead with your most compelling value proposition and include a clear, concise statement of the problem you're solving."
+      feedback: "Your executive summary lacks clarity. I've seen thousands of pitch decks, and I still don't understand what you're actually building here. Cut the jargon.",
+      tip: "State what you do in one clear sentence that my grandmother would understand."
     },
     {
       section: "Market Size",
-      feedback: "Your market analysis is good, but your TAM calculation seems... optimistic. As in 'we'll capture 10% of China' optimistic.",
-      tip: "Break down your market size into TAM, SAM, and SOM with credible sources and a bottom-up calculation approach."
+      feedback: "Let me guess, you're targeting a €1B+ market? Your TAM calculation starts with the population of Earth and goes down from there. Completely unrealistic.",
+      tip: "Start with your actual target users and build up with real data. No more '1% of China' nonsense."
     },
     {
       section: "Competitive Analysis",
-      feedback: "Your competitive landscape slide is missing a few giants that investors will immediately think of. This makes them question what else you might be missing.",
-      tip: "Create a comprehensive competitor matrix highlighting your unique advantages and be honest about where competitors are stronger."
+      feedback: "Your competitive landscape mysteriously omits the three major players everyone knows about. This tells me either you don't know your market or you're hiding something.",
+      tip: "Be honest about competitors. We know they exist, and we want to hear why you'll win anyway."
     },
     {
       section: "Go-to-Market Strategy",
-      feedback: "Your GTM strategy needs more specifics. Currently it's like saying 'Step 1: Build product, Step 2: ???, Step 3: Profit!'",
-      tip: "Outline specific customer acquisition channels with costs, conversion metrics, and a timeline for scaling."
+      feedback: "Your GTM reads like: Step 1: Build product. Step 2: ??? Step 3: IPO. There's no actual plan for acquiring users beyond 'viral growth'.",
+      tip: "Detail specific customer acquisition channels, costs, and timeline with realistic metrics."
     },
     {
       section: "Financial Projections",
-      feedback: "Your financial projections show a beautiful hockey stick, but the assumptions behind them aren't clear. VCs have seen this movie before.",
-      tip: "Include unit economics and realistic revenue forecasts with transparent assumptions that tie directly to your GTM strategy."
+      feedback: "Your financial projections show you reaching €100M ARR in year 3. I've seen unicorns that didn't grow this fast. Pure fantasy.",
+      tip: "Model conservative, middle, and stretch scenarios with unit economics that make mathematical sense."
     },
     {
       section: "Team",
-      feedback: "Your team slide is solid, but doesn't fully explain why this specific team is uniquely positioned to win in this market.",
-      tip: "Highlight relevant domain expertise and past successes that demonstrate your unfair advantage in this specific market."
+      feedback: "Your team slide says you're 'serial entrepreneurs', but I can't find any previous successful exits. Experience in the domain you're targeting is conspicuously absent.",
+      tip: "Highlight relevant domain expertise and explain why this specific team has an unfair advantage in this market."
     }
   ];
 
@@ -57,7 +57,7 @@ const RoastFeedback: React.FC<RoastFeedbackProps> = ({ fileName, roastData }) =>
         <div className="p-2 rounded-full bg-roast-orange/20">
           <Flame className="w-6 h-6 text-roast-orange" />
         </div>
-        <h2 className="text-2xl font-bold text-gradient">Roast Results</h2>
+        <h2 className="text-2xl font-bold text-gradient">Roasted by Jean de La Rochebrochard</h2>
       </div>
       
       {fileName && (
@@ -83,7 +83,7 @@ const RoastFeedback: React.FC<RoastFeedbackProps> = ({ fileName, roastData }) =>
               <h3 className="font-semibold text-roast-blue">{item.section}</h3>
             </div>
             <p className="text-white mb-3">{item.feedback}</p>
-            <p className="text-white/70 text-sm"><span className="text-roast-purple font-medium">Pro tip:</span> {item.tip}</p>
+            <p className="text-white/70 text-sm"><span className="text-roast-purple font-medium">Jean says:</span> {item.tip}</p>
           </div>
         ))}
       </div>
